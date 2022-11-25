@@ -1,0 +1,118 @@
+#invoice-POS {
+    box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+    padding: 2mm;
+    margin: 0 auto;
+    width: 80%;
+    background: #fff;
+    text-align: center;
+  }
+  #invoice-POS ::selection {
+    background: #f31544;
+    color: #fff;
+  }
+  #invoice-POS ::moz-selection {
+    background: #f31544;
+    color: #fff;
+  }
+  #invoice-POS h1 {
+    font-size: 30px;
+    color: #222;
+  }
+  #invoice-POS h2 {
+    font-size: 25px;
+  }
+
+  #invoice-POS p {
+    font-size: 20px;
+    color: #666;
+    line-height: 1.2em;
+  }
+  #invoice-POS #top,
+  #invoice-POS #mid,
+  #invoice-POS #bot {
+    /* Targets all id with 'col-' */
+    border-bottom: 1px solid #eee;
+  }
+  #invoice-POS #top {
+    min-height: 100px;
+  }
+  #invoice-POS #mid {
+    min-height: 80px;
+  }
+  #invoice-POS #bot {
+    min-height: 50px;
+  }
+  #invoice-POS #top .logo {
+    height: 60px;
+    width: 60px;
+    background: url("{{ url_for('static', filename='logo1.png') }}") no-repeat;
+    background-size: 60px 60px;
+  }
+  #invoice-POS .clientlogo {
+    float: left;
+    height: 60px;
+    width: 60px;
+    background: url("{{ url_for('static', filename='client.jpg') }}") no-repeat;
+    background-size: 60px 60px;
+    border-radius: 50px;
+  }
+  #invoice-POS .info {
+    display: block;
+    margin-left: 0;
+  }
+  #invoice-POS .title {
+    float: right;
+  }
+  #invoice-POS .title p {
+    text-align: right;
+  }
+
+  #invoice-POS .tabletitle {
+    font-size: 0.5em;
+    background: #eee;
+  }
+  #invoice-POS .service {
+    border-bottom: 1px solid #eee;
+  }
+  #invoice-POS .item {
+    width: 24mm;
+  }
+  #invoice-POS .itemtext {
+    font-size: 0.5em;
+  }
+  #invoice-POS #legalcopy {
+    margin-top: 5mm;
+  }
+  table{
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  
+}
+  td, th {
+    align-items: center;
+    position: inherit;
+  border: 1px solid #999;
+  padding: 0.25rem 0.5rem;
+  text-align: left;
+}
+td:nth-child(1) {
+    width: 20%;
+    }
+  
+  /* the second */
+  td:nth-child(2) {
+    width: 50%;
+  } 
+  
+  /* the third */
+  td:nth-child(3) {
+    width: 15%;
+   }
+   td:nth-child(4) {
+    width: 20%;
+   }
+   tr:nth-child(1) {
+    background: #a7a7a7;
+    color: white;
+    }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="{{ url_for('static', filename='rec.css') }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title> 
+</head>
+<body>
+
+    <div id="invoice-POS">
+    
+          <div class="logo"></div>
+          <div class="info"> 
+            <h1>Acton Lions Club Ski & Skate Sales</h1>
+          </div>
+        
+        <div class = "user">
+            <h2>Seller: {{ seller }}</h2>
+            <h2>Phone: {{ phone }}</h2>
+            <h2>Address: {{ address }}</h2>
+        </div>
+        <div id="bot">
+            <table>
+                <tr>
+                  <th>Item No.</th>
+                  <th>Item Name</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                
+                {%for i in item%}
+            </tr>
+                <td>{{ i[3] }}</td>
+                <td>{{ i[5] }}</td>
+                <td>{{ i[4] }}</td>
+                <td>{{ i[7] }}</td>
+              </tr>
+                {%endfor%}
+              </table>
+              <div>
+                <p></p>
+            </div>
+            </div>
+            <div>
+                <p></p>
+            </div>
+            <div class = "row">
+                <label>
+                    <a>No of Items Sold: </a> 
+                </label>
+                    <input class = "inputa" type="text" placeholder=0 id = "numitem" readonly="readonly" value = "{{ sold }}">
+                <label>
+                    <a>Total: </a> 
+                </label>
+                    <input class = "inputb" type="text" placeholder="0" id = "total" readonly="readonly" value = "{{ payout }}">
+            </div>
+
+            <div id="legalcopy">
+                <p class="legal"><strong>Thank you for your business!</strong> 
+                </p>
+            </div>
+
+        </div><!--End InvoiceBot-->
+      </div><!--End Invoice-->
+    
+</div>
+</body>
+
+
+</html> 
+<script>
+    window.history.replaceState({ additionalInformation: 'Print this webpage' }, "Print", "/print");
+    window.onload = function() { window.print(); }
+</script>

@@ -1,0 +1,48 @@
+@font-face { font-family: "Open Sans"; src: url('os.TTF'); }
+.body{
+    font-family: "Open Sans";
+}
+
+
+.button {
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    width: 300px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 10px;
+    font-family: "Open Sans";
+  }
+
+.button2 {
+    background-color: #008CBA; 
+    color: white; 
+    border: 2px solid #008CBA;
+  }
+   
+  .button2:hover {
+    background-color: white;
+    color: black;
+  }
+.bottons {
+    background-color: lightblue;
+    border-style: solid;
+    border-color: #008CBA;
+    align-items: center;
+    text-align: center;  
+
+  }
+h1{
+    text-align: center;
+    font-family: "Open Sans";
+}
+.rowb{
+    align-items: center;
+    text-align: center;  
+}

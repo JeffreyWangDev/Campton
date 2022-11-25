@@ -1,0 +1,203 @@
+{% if not item %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item lookup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='itemg.css') }}">
+    <script src="{{url_for('static', filename='all.js')}}"></script>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/item">Item</a></li>
+        <li><a href="/seller">Seller</a></li>
+        <li><a href="/checkout">Checkout</a></li>
+      </ul>
+
+    <div class="container">
+        <h1>Look up a item</h1> 
+        <br>
+        <div class = "register">
+        <form action="" method="post"> 
+
+
+                    <div class = "row">
+                    <a>Item Id: </a> 
+                </label>
+                
+                <input class = "input" type="text" placeholder="Item id" name="tid" required = "true">
+            </div>
+            <div class = "row">
+                {% if error %}
+                
+                <script>alert("{{ error }}")</script>
+            {% endif %}
+        
+          <input class="button button2" type="submit" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+</body>
+</html>
+{% endif %}
+{% if item %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='item.css') }}">
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/item">Item</a></li>
+        <li><a href="/seller">Seller</a></li>
+        <li><a href="/checkout">Checkout</a></li>
+      </ul>
+    <div class="container">
+        <h1>Update a item</h1>
+        <br>
+        <div class = "item">
+            <form id = "mainform" action="/itemu" method="post">
+                <div class = "row-ph"> 
+                    <label for="phonen">
+                        <a>Item internal id(Uneditable): </a> 
+                    </label>
+                    <input value = "{{ item[8] }}" class = "input-ph" type="text" name="cid" required = "true"readonly="readonly"> 
+                </div>
+                <div class = "row-ph"> 
+                    <label for="phonen">
+                        <a>Seller's Phone Number (ex 123 123 1234): </a> 
+                    </label>
+                    <input value = "{{ item[1] }}" class = "input-ph" type="text" placeholder="Phone number" name="phonen" required = "true">
+                </div>
+
+                <div class = "row-no">
+                    <label for="phonen"> 
+                        <a>Item number: </a>
+                    </label>    
+                    <input  value = "{{ item[3] }}" class = "input-no" type="username" placeholder="Item Number" name="id" required = "true" onkeypress="return isNumberKey(event)">
+                    <label for="phonen"> 
+                        <a>Item Price: </a>
+                    </label>
+                    <input  value = "{{ item[4] }}"  class = "input-no" type="username" placeholder="Price" name="price" required = "true" onkeypress="return isNumberKeyoD(event)">
+                </div>
+
+                <div class = "row-na">
+                    <label for="phonen"> 
+                        <a>Item name: </a>
+                    </label>
+                     
+                    <table>
+                        <tr>
+                            
+                         <td><input type="radio" class = "radios" name="name" value="Skis" id="q0" required
+                                    /> <label for='q9'>Skis</label> </td>
+                         <td><input type="radio" class = "radios" name="name" value="Ski Boots" id="q1" 
+                                    />  <label for='q8'> Ski Boots</label> </td>
+                         <td><input type="radio" class = "radios" name="name" value="Ski Poles" id="q2" 
+                                     /> <label for='q7'> Ski Poles</label> </td>
+                                    </tr>
+                                    <tr>
+                          <td><input type="radio" class = "radios" name="name" value="Ice Skates" id="q3" 
+                                      /> <label for='q6'> Ice Skates</label> </td>
+                          <td><input type="radio" class = "radios" name="name" value="Snowboard" id="q4" 
+                                     /> <label for='q5'> Snowboard</label> </td>
+                          <td><input type="radio" class = "radios" name="name" value="Goggles" id="q5"
+                                     /> <label for='q4'>Goggles</label> </td>
+                                    </tr>
+                                    <tr>
+                          <td><input type="radio" class = "radios" name="name" value="Helmets" id="q6"
+                                     /> <label for='q3'> Helmets</label> </td>
+                          <td><input type="radio" class = "radios" name="name" value="lothes/Gloves" id="q7"
+                                     /> <label for='q2'> Clothes/Gloves</label> </td>
+                          <td><input type="radio" class = "radios" name="name" value="1" id="q9"/>  <label for='q1'><input id = "tname" name = "tname" placeholder="Other" class = "input-noo"/></label> </td>
+                        </tr>
+                      </table>
+                </div>
+
+            <div class = "row">
+                <a>Item description: </a>
+            </div>
+                <div class = "row">
+           <textarea id = "texttofill"  class = "input-d" type="username" placeholder="description" name="dis" rows="1" cols="20" ></textarea>
+            </div>
+            <div class = "row-na">
+                <label for="phonen"> 
+                    <a>Item status: </a>
+                </label>
+
+                <input  value = "{{ item[7] }}"  name = "sold" placeholder="Item Name" class = "input-no"  autoComplete="on" list="itemstatus" required = "true"/> 
+            </div>
+            
+            <div class = "row">
+          <input class="button button2" type="submit" value="Done" formaction="/goto?place=home">
+          <input class="button button2" type="submit" value="Update">
+          <input class="button button3" type="submit" value="Lookup another" formaction="/goto?place=item">
+          </div>
+          <div class="row">
+            {% if ierror %}
+            <script>alert("{{ ierror }}")</script>
+        {% endif %}
+        <p></p>
+        </form>
+    
+      </div>
+    </div>
+    <datalist id = "itemstatus">
+        <option value="Not Sold">Item not sold</option>
+        <option value="Sold">Item sold</option>
+        <option value="Paid">Item price paid to seller</option>	
+
+    
+    </datalist>
+</body>
+
+
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  const inputs = Array.from(
+    document.querySelectorAll('input[name=tphone], input[name=tid]')
+  );
+
+  const inputListener = e => {
+    inputs
+      .filter(i => i !== e.target)
+      .forEach(i => (i.required = !e.target.value.length));
+  };
+
+  inputs.forEach(i => i.addEventListener('input', inputListener));
+});
+const textarea = document.getElementById('texttofill');
+
+// Append text
+textarea.value += '{{ item[6] }}';
+//document.getElementById("red").checked = true;
+console.log("{{ item[5] }}")
+var radio = document.querySelectorAll('.radios');
+var tf= true;
+//Cheek the box nedded
+for(var i =0;i<radio.length;i++){
+    if("{{ item[5] }}".toString() == radio[i]["value"].toString()){
+        console.log(i)
+        document.getElementById("q"+i.toString()).checked = true;
+        tf = false
+    }
+}
+if(tf){
+    console.log("he")
+        document.getElementById("q9").checked = true;
+        document.getElementById("tname").value = "{{ item[5] }}";
+}
+</script>
+{% endif %}

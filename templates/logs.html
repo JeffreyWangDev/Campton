@@ -1,0 +1,52 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='logs.css') }}">
+    <script src="{{url_for('static', filename='logs.js')}}"></script>
+</head>
+<body class = "body">
+    
+    <div class="container">
+        <h1>Logs</h1> 
+        <br>
+        <div class = "register">
+            <div class = "row"> 
+            <label class = "label">
+                <a>Password: </a> 
+            </label>
+                <input class = "input" type="password" placeholder="Password" id = "pss" name = "in">
+                <button class = "button button3" onclick="getlogs()">Get logs</button>
+            </div>
+            
+
+
+
+        <div class = "row">
+                <table id = "all">
+                    <tr>
+                      <th>Id</th>
+                      <th>Ip</th>
+                      <th>User-agent</th>
+                      <th>Event</th>
+                      <th>Time</th>
+                    </tr>
+                  </table>
+                </div>
+          
+          </div>
+
+        <div class = "row">
+            <input class="button button2" type="submit" value="Download" onclick="download()">
+        </div>
+      </div>
+    </div>
+</body>
+
+</html>
+

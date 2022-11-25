@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}">
+</head>
+<body>
+  <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
+  <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/item">Item</a></li>
+      <li><a href="/seller">Seller</a></li>
+      <li><a href="/checkout">Checkout</a></li>
+    </ul>
+    <div class="container">
+        <h1>Seller's report</h1> 
+        <br>
+        <div class = "register">
+        <form action="" method="post"> 
+
+
+                    <div class = "row">
+                    <a>Seller's Phone Number (ex 123 123 1234): </a> 
+                </label>
+                
+                <input class = "input" type="text"placeholder="Phone number" name="phonen" required = "true">
+            </div>
+            <div class = "row">
+                {% if error %}
+                
+          <script>alert("{{ error}}")</script></p> 
+            {% endif %}
+        
+          <input class="button button2" type="submit" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+</body>
+
+
+</html>
+

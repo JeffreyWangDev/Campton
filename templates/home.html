@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title> 
+</head>
+<body>
+    {% if msg %}
+          <h1>{{ msg }}</h1>
+        {% endif %} 
+    <div class = "bottons">
+        <h1>Acton Lions Club Ski & Skate Sales</h1>
+    <div class = "rowb">
+        <a href="{{ url_for('register') }}" class="button button2">Add Seller</a>
+        <a href="{{ url_for('newitem') }}" class="button button2">Add Item</a>
+    </div>
+    <div class = "rowb">
+        
+        <a href="{{ url_for('seller') }}" class="button button2">Lookup Seller</a>
+        <a href="{{ url_for('item') }}" class="button button2">Lookup Item</a>
+    </div>
+    <div class = "rowb">
+        <a href="{{ url_for('report') }}" class="button button2">Seller Settlement Report</a>
+        <a href="{{ url_for('checkout') }}" class="button button2">Sales Checkout Report</a>
+    </div>
+</div>
+</body>
+</html> 

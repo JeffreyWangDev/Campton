@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='item.css') }}">
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/item">Item</a></li>
+        <li><a href="/seller">Seller</a></li>
+        <li><a href="/checkout">Checkout</a></li>
+      </ul>
+    {% if msg %}
+    <h1>{{ msg }}</h1>
+  {% endif %} 
+    <div class="container">
+        <h1>Add item</h1>
+        <br>
+        <div class = "item">
+            <form action="" method="post">
+                
+                <div class = "row-ph">
+                    <label for="phonen">
+                        <a>Seller's Phone Number (ex 123 123 1234): </a> 
+                    </label>
+                    <input class = "input-ph" type="text" placeholder="Phone number" name="phonen" required = "true" value="{{ phone }}">
+                </div>
+
+                <div class = "row-no">
+                    <label for="phonen"> 
+                        <a>Item number: </a>
+                    </label>
+                    <input class = "input-no" type="username" placeholder="Item Number" name="id" required = "true" onkeypress="return isNumberKey(event)">
+                    <label for="phonen"> 
+                        <a>Item Price: </a>
+                    </label>
+                    <input class = "input-no" type="username" placeholder="Price" name="price" required = "true" onkeypress="return isNumberKeyoD(event)">
+                </div>
+
+                <div class = "row-na">
+                    <label for="phonen"> 
+                        <a>Item name: </a>
+                    </label>
+                    <table>
+                        <tr>
+                            <td><input type="radio" class = "radios" name="name" value="Skis" id="q9" required
+                                /> <label for='q9'>Skis</label> </td>
+                     <td><input type="radio" class = "radios" name="name" value="Ski Boots" id="q8" 
+                                />  <label for='q8'> Ski Boots</label> </td>
+                     <td><input type="radio" class = "radios" name="name" value="Ski Poles" id="q7" 
+                                 /> <label for='q7'> Ski Poles</label> </td>
+                                </tr>
+                                <tr>
+                      <td><input type="radio" class = "radios" name="name" value="Ice Skates" id="q6" 
+                                  /> <label for='q6'> Ice Skates</label> </td>
+                      <td><input type="radio" class = "radios" name="name" value="Snowboard" id="q5" 
+                                 /> <label for='q5'> Snowboard</label> </td>
+                      <td><input type="radio" class = "radios" name="name" value="Goggles" id="q4"
+                                 /> <label for='q4'>Goggles</label> </td>
+                                </tr>
+                                <tr>
+                      <td><input type="radio" class = "radios" name="name" value="Helmets" id="q3"
+                                 /> <label for='q3'> Helmets</label> </td>
+                      <td><input type="radio" class = "radios" name="name" value="lothes/Gloves" id="q2"
+                                 /> <label for='q2'> Clothes/Gloves</label> </td>
+                          <td><input type="radio" name="name" value="1" id="q1"
+                                     />  <label for='q1'><input name = "tname" placeholder="Other" class = "input-noo"/></label> </td>
+                        </tr>
+                      </table>
+                </div>
+
+            <div class = "row">
+              
+                <a>Item description: </a> 
+            </div>
+                <div class = "row">
+           <textarea class = "input-d" type="username" placeholder="Description" name="dis" rows="1" cols="20" ></textarea>
+
+            </div>
+           
+            <div class = "row">
+          <input class="button button2" type="submit" value="Submit">
+          <input class="button button2" type="submit" value="Register Another" formaction="/i2">
+          </div>
+          <div class = "row">
+          {% if error %}
+          <script>alert("{{ error}}")</script>
+        {% endif %}
+    </div>
+    <div><P></P></div>
+    <div><P></P></div>
+
+        </form>
+    
+      </div>
+    </div>
+</body>
+
+
+
+<datalist id = "itemnames">
+    <option value="List Name 1">Description of List Name 1</option>
+    <option value="List Name 2">Description of List Name 2</option>
+    <option value="List Name 3">Description of List Name 3</option>	
+    <option value="List Name 4">Description of List Name 4</option>
+    <option value="List Name 5">Description of List Name 5</option>
+    <option value="List Name 6">Description of List Name 6</option>	
+    <option value="List Name 7">Description of List Name 7</option>
+    <option value="List Name 8">Description of List Name 8</option>
+    <option value="List Name 9">Description of List Name 9</option>	
+
+</datalist>
+</html>
+<script>
+    function isNumberKeyoD(evt){
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode > 31 && (charCode != 46 &&(charCode < 48 || charCode > 57)))
+
+        return false;
+    return true;
+}
+function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+</script>

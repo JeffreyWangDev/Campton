@@ -1,0 +1,66 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chek.css') }}">
+    <script src="{{url_for('static', filename='cheekout.js')}}"></script>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/item">Item</a></li>
+        <li><a href="/seller">Seller</a></li>
+        <li><a href="/checkout">Checkout</a></li>
+      </ul>
+    <div class="container">
+        <h1>Sales Checkout</h1> 
+        <br>
+        <div class = "register">
+            <div class = "row"> 
+            <label>
+                <a>Item No: </a> 
+            </label>
+                <input class = "input" type="text" placeholder="Item number" id = "item_number" name = "in">
+                <button class = "button button3" onclick="additem()">Add item</button>
+            </div>
+            
+
+
+
+        <div class = "row">
+                <table id = "all">
+                    <tr>
+                      <th>Item No.</th>
+                      <th>Item Name</th>
+                      <th>Price</th>
+                    </tr>
+                  </table>
+                </div>
+          
+          </div>
+        <div class = "row">
+            <label>
+                <a>No of items: </a> 
+            </label>
+                <input class = "inputa" type="text" placeholder=0 id = "numitem" readonly="readonly">
+            <label>
+                <a>Total: </a> 
+            </label>
+                <input class = "inputb" type="text" placeholder="0" id = "total" readonly="readonly">
+        </div>
+        <div class = "row">
+            <input class="button button2" type="submit" value="Submit" onclick="submit()">
+        </div>
+      </div>
+    </div>
+</body>
+
+
+</html>
+

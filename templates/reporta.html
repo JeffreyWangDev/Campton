@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='reporta.css') }}">
+    <script src="{{url_for('static', filename='report.js')}}"></script>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/item">Item</a></li>
+        <li><a href="/seller">Seller</a></li>
+        <li><a href="/checkout">Checkout</a></li>
+      </ul>
+    <div class="container">
+        <h1>Seller's report</h1> 
+        <br>
+        <div class = "register">
+        <form action="" method="post"> 
+
+
+                    <div class = "row"> 
+                    <a>Seller's Phone Number: </a> 
+                </label>
+                
+                <input value = "{{ user[2] }}" class = "input" type="text"placeholder="Phone number" id = "phonen" name="phonen" required = "true" readonly="readonly">
+            </div>
+            <div class = "row"> 
+                <a>Seller's name: </a> 
+            </label>
+            
+            <input value = "{{ user[3] }}" class = "input" type="text"placeholder="Sellers name" name="name" required = "true" readonly="readonly">
+        </div>
+        <div class = "row">
+
+        
+                <table>
+                    <tr>
+                      <th>Item No.</th>
+                      <th>Item Name</th>
+                      <th>Price</th>
+                      <th>Status</th>
+                    </tr>
+                    {%for i in item%}
+                  <tr>
+                    <td>{{ i[3] }}</td>
+                    <td>{{ i[5] }}</td>
+                    <td>{{ i[4] }}</td>
+                    <td>{{ i[7] }}</td>
+                  </tr>
+                    {%endfor%}
+                  </table>
+                </div>
+                <div class = "row">
+                    <label>
+                        <a>Items Sold: </a> 
+                    </label>
+                        <input class = "inputa" type="text" placeholder=0 id = "numitem" readonly="readonly" value = "{{ sold }}">
+                    <label>
+                        <a>Items Not Sold: </a> 
+                    </label>
+                    <input class = "inputa" type="text" placeholder=0 id = "numitem" readonly="readonly" value = "{{ notsold }}">
+                </div>
+
+                <div class = "row">
+
+                    <label>
+                        <a>Gross Sales: </a> 
+                    </label>
+                        <input class = "inputb" type="text" placeholder="0" id = "total" readonly="readonly" value = "{{ max }}">
+
+                  <label>
+                      <a>Net Payout: </a> 
+                  </label>
+                  <input class = "inputb" type="text" placeholder="0" id = "total" readonly="readonly" value = "{{ payout }}">
+                      
+              </div>
+
+          </form>
+          <input class="button button2" type="submit" value="Done" onclick="submit()">
+          <input class="button button2" type="submit" value="Lookup another" onclick="again()">
+          <input class="button button2" type="submit" value="Print" onclick="printfile()">
+          </div>
+        
+      </div>
+    </div>
+</body>
+
+
+</html> 
+
