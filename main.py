@@ -372,5 +372,3 @@ def download_db():
 def admin():
     return render_template("admin.html")
 
-
-app.run()
