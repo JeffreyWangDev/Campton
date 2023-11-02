@@ -1,5 +1,4 @@
-from ast import Gt
-from flask import Flask,flash,g,redirect,render_template,request,url_for,jsonify,send_from_directory
+from flask import Flask,g,redirect,render_template,request,url_for,jsonify,send_from_directory, send_file
 from requests import post
 from static.backend import *
 import json
@@ -172,6 +171,7 @@ def item():
         if item[0] == "0":
             pass
         else:
+            a = "a"
             int(a)
     except:
         item = None
@@ -197,7 +197,6 @@ def item():
 
 @app.route('/itemu', methods=[ 'POST'])
 def itemu():
-    error = None
     if request.method == 'POST':
         if str(request.form['name']) == "1":
             name = request.form['tname']
@@ -340,7 +339,7 @@ def api_getlog():
 def api_downloadlog():
     a = getall()
     things = ["user","items","log"]
-    count = 0 
+    count = 0
     for i in a:
         with open(f"./download/{things[count]}.csv", 'w') as f:
             for k in i:
@@ -357,7 +356,21 @@ def api_downloadlog():
     #return send_from_directory(directory='logs')
     return(render_template("down.html"))
 @app.route('/down/<filename>', methods=['GET', 'POST'])
-def download(filename):    
-    return send_from_directory(directory='download', path=f"/download/{filename}",filename=filename)
+def download(filename): 
+    print(filename)
+    try:
+        return send_file(f"./download/{filename}")
+    except:
+        return "File does not exist"
+
+@app.route("/download/database")
+def download_db():
+    print("here")
+    return send_file("main.db")
+
+@app.route("/admin")
+def admin():
+    return render_template("admin.html")
 
 
+app.run()

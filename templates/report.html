@@ -9,13 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}">
 </head>
 <body>
-  <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
-  <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/item">Item</a></li>
-      <li><a href="/seller">Seller</a></li>
-      <li><a href="/checkout">Checkout</a></li>
-    </ul>
+  {% include 'foot.html' %}
     <div class="container">
         <h1>Seller's report</h1> 
         <br>

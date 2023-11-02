@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+
+</head>
+<body>
+    {% include 'foot.html' %}
+
+    <div class = "rowb">
+        
+        <a href="{{ url_for('logs') }}" class="button button2">Logs</a>
+        <a href="{{ url_for('api_downloadlog') }}" class="button button2">Database</a>
+    </div>
+
+</body>
+</html>

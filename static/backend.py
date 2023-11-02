@@ -92,7 +92,7 @@ def updateseller(request):
         return("Error: User not found")
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
-    cursor.execute("UPDATE user SET sellerid =?,phone=?,name=?,address=?,city=?,state=?,zip=? WHERE sellerid=?", (str(id),int(phone),str(name),str(address),str(city),str(state),str(zip),str(id)))
+    cursor.execute("UPDATE user SET sellerid =?,name=?,address=?,city=?,state=?,zip=? WHERE sellerid=?", (str(id),str(name),str(address),str(city),str(state),str(zip),str(id)))
     sqlite.commit()
     cursor.close()
     sqlite.close()
