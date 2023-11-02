@@ -5,3 +5,4 @@ skiskatewebsite.zip
 dockerfile
 env
 .dockerignore
+.csv

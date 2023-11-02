@@ -8,13 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
 </head>
 <body>
-    <link rel="stylesheet" href="{{ url_for('static', filename='foot.css') }}">
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/item">Item</a></li>
-        <li><a href="/seller">Seller</a></li>
-        <li><a href="/checkout">Checkout</a></li>
-      </ul>
+    {% include 'foot.html' %}
     {% if msg %}
     <h1>{{ msg }}</h1>
   {% endif %}
@@ -50,7 +44,7 @@
                 <label for="state">
                     <a>State: </a>
                 </label>
-            <input name = "state" class = "inputstate"  autoComplete="on" list="states"/> 
+            <input name = "state" class = "inputstate" value="MA" autoComplete="on" list="states"/> 
             <label for="zip">
                 <a>Zip: </a>
             </label>

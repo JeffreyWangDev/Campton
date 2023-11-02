@@ -35,7 +35,5 @@ async function dowloadlogs(){
       })
     var res =  await ress.json();
     console.log(res)
-    if(res["res"] == 0){
-        alert(res["data"])
-    }
+    alert(res["data"])
 }
