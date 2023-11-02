@@ -6,6 +6,15 @@ import phonenumbers
 import time
 
 def cheekphone(phone):
+    """
+    Checks the validity of a phone number.
+
+    Args:
+        phone (str): The phone number to check.
+
+    Returns:
+        bool: True if the phone number is valid, False otherwise.
+    """
     try:
         phnum = phonenumbers.parse("+1"+str(phone))
         if(phonenumbers.is_valid_number(phnum) == True):
@@ -16,6 +25,12 @@ def cheekphone(phone):
         return(False)
     
 def getnewid():
+    """
+    Generates a new unique seller ID.
+
+    Returns:
+        str: A new unique seller ID.
+    """
     link = ''.join(random.choice(string.ascii_letters+str(1234567890)) for x in range(5))
     link = link +random.choice("ABCDEFGHIJKMNORSUVWXYZ1234567890")
     sqlite = sl.connect('main.db')
@@ -28,6 +43,12 @@ def getnewid():
     else:
         return(getnewid())
 def getnewiid():
+    """
+    Generates a new unique item ID.
+
+    Returns:
+        str: A new unique item ID.
+    """
     link = ''.join(random.choice(string.ascii_letters+str(1234567890)) for x in range(5))
     link = link +random.choice("ABCDEFGHIJKMNORSUVWXYZ1234567890")
     sqlite = sl.connect('main.db')
@@ -40,6 +61,15 @@ def getnewiid():
     else:
         return(getnewiid())
 def newseller(request):
+    """
+    Creates a new seller in the database.
+
+    Args:
+        request: The request object containing seller information.
+
+    Returns:
+        int or str: 0 if the seller is successfully added, or an error message if there is an issue.
+    """
     phonen,name,address,city,state,zip = request.form['phonen'],request.form['name'],request.form['address'],request.form['city'],request.form['state'],request.form['zip']
     if not cheekphone(phonen):
         return("Error: Phone number invalid")
@@ -63,6 +93,15 @@ def newseller(request):
     return(0)
 
 def getseller(pnum):
+    """
+    Retrieves seller information by phone number.
+
+    Args:
+        pnum (str): The phone number of the seller.
+
+    Returns:
+        tuple: A tuple containing an error code (0 for success, 1 for error) and either seller information or an error message.
+    """
     if not cheekphone(pnum):
         return((1,"Error: Phone number invalid"))
     phone = str(pnum.replace(" ",""))
@@ -79,6 +118,15 @@ def getseller(pnum):
 
 
 def updateseller(request):
+    """
+    Updates seller information in the database.
+
+    Args:
+        request: The request object containing updated seller information.
+
+    Returns:
+        int or str: 0 if the seller information is successfully updated, or an error message if there is an issue.
+    """
     phonen,name,address,city,state,zip,id = request.form['phonen'],request.form['name'],request.form['address'],request.form['city'],request.form['state'],request.form['zip'],request.form['sid']
     if not cheekphone(phonen):
         return("Error: Phone number invalid")
@@ -98,7 +146,17 @@ def updateseller(request):
     sqlite.close()
     addlog(f"UPDATESELLER: {str(id)} {str(phone)} {str(name)} {str(address)} {str(city)} {str(state)} {str(zip)} {str(id)}",request)
     return(0)
-def nitem(request,name):  
+def nitem(request,name):
+    """
+    Adds a new item to the database.
+
+    Args:
+        request: The request object containing item information.
+        name (str): The name of the item.
+
+    Returns:
+        int or str: 0 if the item is successfully added, or an error message if there is an issue.
+    """
     sellerphone,itemid,itemprice,itemname,itemdisc = request.form['phonen'],request.form['id'],request.form['price'],name,request.form['dis']  
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
@@ -122,6 +180,15 @@ def nitem(request,name):
     return(0)
 
 def getitem(itemid=None):
+    """
+    Retrieves item information by item ID.
+
+    Args:
+        itemid (int): The item ID to retrieve. If None, retrieves all items.
+
+    Returns:
+        tuple: A tuple containing an error code (1 for success, 2 for error) and either item information or an error message.
+    """
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM items WHERE itemid = ?", (int(itemid),)).fetchall()
@@ -131,6 +198,16 @@ def getitem(itemid=None):
         return((1,item))
     return((2,"Error: Item not found"))
 def updateitem(request, name):
+    """
+    Updates item information in the database.
+
+    Args:
+        request: The request object containing updated item information.
+        name (str): The name of the item.
+
+    Returns:
+        int or str: 0 if the item information is successfully updated, or an error message if there is an issue.
+    """
     sellerphone,itemid,itemprice,itemname,itemdisc,sold,id = request.form['phonen'],request.form['id'],request.form['price'],name,request.form['dis'],request.form['sold'],request.form['cid']
     a = getseller(sellerphone.replace(" ",""))
     if a[0]==1:
@@ -166,6 +243,15 @@ def updateitem(request, name):
     addlog(f"UPDATEITEM: {str(phone)} {str(a[1])} {str(itemid)} {str(itemprice)} {str(itemname)} {str(itemdisc)} {sold} {str(id)}",request)
     return(0)
 def getreport(phone):
+    """
+    Retrieves a report of items associated with a seller's phone number.
+
+    Args:
+        phone (str): The phone number of the seller.
+
+    Returns:
+        list: A list containing either seller information or a list of item information.
+    """
     phone = phone.replace(" ","")
     a = getseller(phone.replace(" ",""))
     #print(a)
@@ -179,9 +265,27 @@ def getreport(phone):
     #print(item)
     return([0,item])
 
-def phone_format(n):                                                                                                                                  
+def phone_format(n):
+    """
+    Formats a phone number with dashes.
+
+    Args:
+        n (str): The phone number to format.
+
+    Returns:
+        str: The formatted phone number.
+    """                                                                                                                              
     return format(int(n[:-1]), ",").replace(",", "-") + n[-1]   
 def reporta(request):
+    """
+    Marks items as paid in the database and updates their status.
+
+    Args:
+        request: The request object containing seller information.
+
+    Returns:
+        int or str: 0 if the report is successful, or an error message if there is an issue.
+    """
     phone =request.json["phone"]
     phone = phone.replace(" ","")
     a = getseller(phone.replace(" ",""))
@@ -197,7 +301,18 @@ def reporta(request):
     sqlite.close()
     addlog(f"REPORT: {str(phone)}",request)
     return(0) 
+    
 def postitems(items,request):
+    """
+    Marks items as sold in the database and updates their status.
+
+    Args:
+        items (dict): A dictionary of items to mark as sold.
+        request: The request object.
+
+    Returns:
+        list: A list containing an error code (0 for success, 1 for item not found, 2 for item already sold) and an error message if applicable.
+    """
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     for i in items: 
@@ -218,6 +333,17 @@ def postitems(items,request):
     return([0]) 
 
 def addlog(event,request):
+
+    """
+    Adds a log entry to the database.
+
+    Args:
+        event (str): The log event description.
+        request: The request object.
+
+    Returns:
+        int: Always returns 0.
+    """
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     cursor.execute("INSERT INTO log(event,ip,useragent,time) VALUES (?, ?, ?, ?)", (str(event),str(request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)),str(request.headers["User-Agent"]),str(time.time())))
@@ -226,6 +352,15 @@ def addlog(event,request):
     sqlite.close()
     return(0)
 def getlog(password):
+    """
+    Retrieves the log entries from the database.
+
+    Args:
+        password (str): The password to access the log (must be "Password12").
+
+    Returns:
+        list: A list containing an error code (0 for wrong password, 1 for success) and the log entries if the password is correct.
+    """
     if password == "Password12":
         sqlite = sl.connect('main.db')
         cursor = sqlite.cursor()
@@ -236,6 +371,12 @@ def getlog(password):
     else:
         return([0,"Wrong Password!"])
 def getall():
+    """
+    Retrieves all data from the database, including user information, item information, and log entries.
+
+    Returns:
+        list: A list containing user information, item information, and log entries.
+    """
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     item1 = cursor.execute("SELECT * FROM user").fetchall()
