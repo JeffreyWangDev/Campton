@@ -1,8 +1,0 @@
-0,id,event,ip,useragent,time
-0,1,NEWSELLER: WPzk8Y 9782748173 Jeffrey Wang 92 meadow lane Boxborough MA 01719,10.240.0.113,Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36,1698841450.9914281
-0,2,UPDATESELLER: WPzk8Y 9782748173 Jeffrey asd 92 meadow lane Boxborough MA 01719 WPzk8Y,10.240.0.113,Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36,1698841462.2980978
-0,3,NEWITEM: 9782748173 WPzk8Y 1 10 Ski Boots I love J 0 7IvBZF,10.240.4.161,Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36,1698843263.827866
-0,4,NEWITEM: 9782748173 WPzk8Y 2 90 Skis Dinos shit 0 OamLF5,10.240.3.217,Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36,1698843279.412008
-0,5,NEWITEM: 9782748173 WPzk8Y 90 14 Goggles asks 0 VG5EwX,10.240.1.75,Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36,1698843318.8605018
-0,6,CHEEKOUT: {'1': '1', '2': '2'},10.240.3.217,Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36,1698843338.9755838
-0,7,REPORT: 9782748173,10.240.4.209,Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36,1698843385.216933
