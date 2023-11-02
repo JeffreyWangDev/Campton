@@ -1,3 +1,4 @@
+import sqlite3 as sl
 acc = sl.connect('main.db')
 
 with acc: 
