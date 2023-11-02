@@ -1,7 +1,9 @@
+""""Database for the app"""
+import sqlite3 as sl
 import werkzeug
 from flask import Flask,redirect,render_template,request,url_for,jsonify, send_file
-from backend import *
-
+#from backend import *
+import backend
 app = Flask(__name__)
 
 @app.route('/goto', methods=['GET', 'POST'])
@@ -34,7 +36,7 @@ def make():
         None
     """
     acc = sl.connect('main.db')
-    
+
     with acc:
         acc.execute("""
             CREATE TABLE IF NOT EXISTS user (
@@ -88,7 +90,7 @@ def register():
     error = request.args.get('error', None)
     msg = request.args.get('msg', None)
     if request.method == 'POST':
-        a = newseller(request)
+        a = backend.newseller(request)
         if a !=0:
             error = a
         else:
@@ -104,10 +106,10 @@ def register2():
     """
     error = None
     if request.method == 'POST':
-        a = newseller(request)
+        a = backend.newseller(request)
         if a !=0:
             error = a
-        else: 
+        else:
             return redirect(url_for('register', msg="User added"))
     return redirect(url_for('register', error=error))
 
@@ -120,10 +122,10 @@ def seller():
     """
     error = None
     if request.method == 'POST':
-        a = list(getseller(request.form['phonenn']))
+        a = list(backend.getseller(request.form['phonenn']))
         if a[0]==0:
             aa = list(a[1])
-            aa[2] = phone_format(str(aa[2])).replace("-"," ")
+            aa[2] = backend.phone_format(str(aa[2])).replace("-"," ")
             return render_template('user.html', user=aa)
         else:
             error = a[1]
@@ -137,10 +139,16 @@ def update():
     error = request.args.get('error', None)
     user = request.args.get('user', None)
     if request.method == 'POST':
-        a = updateseller(request)
+        a = backend.updateseller(request)
         if a !=0:
             error = a
-            user = (1,1,request.form['phonen'],request.form['name'],request.form['address'],request.form['city'],request.form['state'],request.form['zip'])
+            phone = request.form['phonen']
+            name = request.form['name']
+            address = request.form['address']
+            city = request.form['city']
+            state = request.form['state']
+            zip_code = request.form['zip']
+            user = (1,1,phone,name,address,city,state,zip_code)
         else:
             return redirect(url_for('home', msg="User updated"))
     return render_template("user.html", uerror=error , user = user)
@@ -168,7 +176,7 @@ def newitem():
                 print("here")
         else:
             name = request.form['name']
-        a = nitem(request,name)
+        a = backend.nitem(request,name)
         if a !=0:
             error = a
         else:
@@ -190,7 +198,7 @@ def newitem2():
                 name = "Other"
         else:
             name = request.form['name']
-        a = nitem(request,name)
+        a = backend.nitem(request,name)
         if a !=0:
             error = a
             return redirect(url_for('newitem', error=error,phone=request.form['phonen']))
@@ -211,17 +219,16 @@ def item():
         if item_data[0] == "0":
             pass
         else:
-            a = "a"
-            int(a)
-    except:
+            raise ValueError
+    except (ValueError, IndexError):
         item_data = None
     if item_data:
         return render_template('item.html',item = item_data,ierror=error)
     if request.method == 'POST':
-        a = list(getitem(request.form['tid']))
+        a = list(backend.getitem(request.form['tid']))
         if a[0]==1:
             item_data = list(a[1][0])
-            item_data[1] = phone_format(str(item_data[1])).replace("-"," ")
+            item_data[1] = backend.phone_format(str(item_data[1])).replace("-"," ")
             if item_data[7] ==0:
                 item_data[7]="Not Sold"
             elif item_data[7]==1:
@@ -247,11 +254,21 @@ def itemu():
                 name = "Other"
         else:
             name = request.form['name']
-        a = updateitem(request,name)
+        a = backend.updateitem(request,name)
         if a==0:
             return redirect(url_for("home",msg = "Item updated"))
         else:
-            return redirect(url_for("item",error = a,item ="".join(str(e)+"_____" for e in[0,request.form['phonen'],0,request.form['id'],request.form['price'],request.form['name'],request.form['dis'],request.form['sold'],request.form['cid']])))
+            item_data ="".join(str(e)+"_____" for e in[
+                0,
+                request.form['phonen'],
+                0,
+                request.form['id'],
+                request.form['price'],
+                request.form['name'],
+                request.form['dis'],
+                request.form['sold'],
+                request.form['cid']])
+            return redirect(url_for("item",error = a,item=item_data))
 
 @app.route('/report', methods=['GET', 'POST'])
 def report():
@@ -260,8 +277,8 @@ def report():
     """
     error = request.args.get('error', None)
     if request.method == 'POST':
-        a =getreport(request.form['phonen'])
-        b = getseller(request.form['phonen'])
+        a =backend.getreport(request.form['phonen'])
+        b = backend.getseller(request.form['phonen'])
         max_amount = 0
         notsold = 0
         sold = 0
@@ -285,13 +302,20 @@ def report():
                 elif i[7] == 3:
                     i[7] = "Returned"
                 c.append(i)
-            b[2] = phone_format(str(b[2])).replace("-"," ")
+            b[2] = backend.phone_format(str(b[2])).replace("-"," ")
             pay = max_amount*7
             pay=pay/10
             if "."in str(pay):
                 paya = str(pay).split(".")
                 pay = paya[0]+"."+paya[1][:2]
-            return render_template("reporta.html",item = c,user =b,max = max_amount,sold=sold,notsold=notsold,payout = pay)
+            return render_template(
+            "reporta.html",
+            item = c,
+            user =b,
+            max = max_amount,
+            sold=sold,
+            notsold=notsold,
+            payout = pay)
         else:
             error = a
     return render_template("report.html",error=error)
@@ -302,10 +326,10 @@ def reportapi():
     Seller report api
     """
     pnum =request.json["phone"]
-    b = getseller(pnum)
+    b = backend.getseller(pnum)
     if b[1][8]:
         return(jsonify({"status":"Error: Report already generated for this user"}),418)
-    a =reporta(request)
+    a =backend.reporta(request)
     if a ==0:
         #return redirect(url_for("home",msg = "Changed all items sold to paid"))
         return(jsonify({"status":"done"}),200)
@@ -318,8 +342,8 @@ def print_report():
     """
     phone = request.args.get('phone', None)
     if phone:
-        a =getreport(phone)
-        b = getseller(phone)
+        a =backend.getreport(phone)
+        b = backend.getseller(phone)
         max_amount = 0
         notsold = 0
         sold = 0
@@ -343,12 +367,20 @@ def print_report():
                 elif i[7] == 3:
                     i[7] = "Returned"
                 c.append(i)
-            b[2] = phone_format(str(b[2])).replace("-"," ")
+            b[2] = backend.phone_format(str(b[2])).replace("-"," ")
             pay = max_amount*0.7
             if "."in str(pay):
                 paya = str(pay).split(".")
                 pay = paya[0]+"."+paya[1][:2]
-            return render_template("rec.html", item = c,user =b,sold=sold,payout = pay,seller = b[3],phone = b[2],address=b[4])
+            return render_template(
+                "rec.html", 
+                item = c,
+                user =b,
+                sold=sold,
+                payout = pay,
+                seller = b[3],
+                phone = b[2],
+                address=b[4])
 
     return redirect(url_for("report"))
 @app.route('/print')
@@ -370,7 +402,7 @@ def api_getitem():
     Api to get item
     """
     num = request.args.get('itemnum', None)
-    a = getitem(num)
+    a = backend.getitem(num)
     return({"res":a[0],"data":a[1]})
 @app.route('/api/postitems', methods=['POST'])
 def api_postitems():
@@ -378,7 +410,7 @@ def api_postitems():
     Updates the item
     """
     content = request.json
-    a = postitems(content,request)
+    a = backend.postitems(content,request)
     if a[0] == 0:
         return jsonify({"status":"updated"})
     elif a[0] ==1:
@@ -398,7 +430,7 @@ def api_getlog():
     """
     Gets the log
     """
-    a=getlog(request.json["password"])
+    a=backend.getlog(request.json["password"])
     if a[0]==1:
         return({"res":a[0],"data":a[1]})
     return(jsonify({"res":a[0],"data":a[1]}),418)
@@ -409,7 +441,7 @@ def api_downloadlog():
     """
     Downloads the database
     """
-    a = getall()
+    a = backend.getall()
     things = ["user","items","log"]
     count = 0
     for i in a:
