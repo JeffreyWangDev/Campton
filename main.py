@@ -106,7 +106,7 @@ def register():
 @app.route('/r2', methods=['GET', 'POST'])
 def register2():
     """
-    Handles user registration form submission. Redirects to the 'register' route with error or success message.
+    Handles user registration form submission. Goes to 'register' with error or success msg.
 
     Returns:
         Flask redirect response.
@@ -210,7 +210,7 @@ def newitem():
 @app.route('/i2', methods=['GET', 'POST'])
 def newitem2():
     """
-    Handles item creation form submission. Redirects to the 'newitem' route with error or success message.
+    Handles item creation form submission. Redirects to 'newitem' with error or success msg.
 
     Returns:
         Flask redirect response.
@@ -274,7 +274,7 @@ def item():
 @app.route('/itemu', methods=[ 'POST'])
 def itemu():
     """
-    Handles item update form submission. Redirects to the 'item' route with error or success message.
+    Handles item update form submission. Redirects to the 'item' route with error or success msg.
 
     Returns:
         Flask redirect response.
@@ -309,7 +309,7 @@ def report():
     Displays a report form and error messages on GET requests.
 
     Returns:
-        - On successful report generation, renders the 'reporta.html' template with seller and item details.
+        - On successful report gen, renders the 'reporta.html' template with seller/item info.
         - On error or POST request, renders the 'report.html' template with error message.
     """
     error = request.args.get('error', None)
