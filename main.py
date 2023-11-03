@@ -4,7 +4,7 @@ import werkzeug
 from flask import Flask,redirect,render_template,request,url_for,jsonify, send_file
 #from backend import *
 import backend
-import make
+import make as backend_make
 app = Flask(__name__)
 
 @app.route('/goto', methods=['GET', 'POST'])
@@ -40,7 +40,7 @@ def make():
     Returns:
         A simple confirmation message.
     """
-    make.make_database()
+    backend_make.make_database()
 
     return "Done"
 @app.route('/register', methods=['GET', 'POST'])
