@@ -136,8 +136,7 @@ def seller():
             aa = list(a[1])
             aa[2] = backend.phone_format(str(aa[2])).replace("-"," ")
             return render_template('user.html', user=aa)
-        else:
-            error = a[1]
+        error = a[1]
     return render_template("user.html", error=error)
 
 @app.route('/update', methods=['GET', 'POST'])
@@ -227,8 +226,7 @@ def newitem2():
         if a !=0:
             error = a
             return redirect(url_for('newitem', error=error,phone=request.form['phonen']))
-        else:
-            return redirect(url_for('newitem', msg="Item added",phone=request.form['phonen']))
+        return redirect(url_for('newitem', msg="Item added",phone=request.form['phonen']))
             #return redirect(url_for('newitem', msg="Item added"))
     return redirect(url_for('newitem', error=error))
 
@@ -267,8 +265,8 @@ def item():
             elif item_data[7] == 3:
                 item_data[7] = "Returned"
             return render_template('item.html',item = item)
-        else:
-            error = a[1]
+
+        error = a[1]
     return render_template("item.html", error=error)
 
 @app.route('/itemu', methods=[ 'POST'])
@@ -289,19 +287,19 @@ def itemu():
         a = backend.updateitem(request,name)
         if a==0:
             return redirect(url_for("home",msg = "Item updated"))
-        else:
-            item_data ="".join(str(e)+"_____" for e in[
-                0,
-                request.form['phonen'],
-                0,
-                request.form['id'],
-                request.form['price'],
-                request.form['name'],
-                request.form['dis'],
-                request.form['sold'],
-                request.form['cid']])
-            return redirect(url_for("item",error = a,item=item_data))
 
+        item_data ="".join(str(e)+"_____" for e in[
+            0,
+            request.form['phonen'],
+            0,
+            request.form['id'],
+            request.form['price'],
+            request.form['name'],
+            request.form['dis'],
+            request.form['sold'],
+            request.form['cid']])
+        return redirect(url_for("item",error = a,item=item_data))
+    return None
 @app.route('/report', methods=['GET', 'POST'])
 def report():
     """
@@ -353,8 +351,8 @@ def report():
             sold=sold,
             notsold=notsold,
             payout = pay)
-        else:
-            error = a
+
+        error = a
     return render_template("report.html",error=error)
 
 @app.route('/r', methods=['POST'])
@@ -471,10 +469,9 @@ def api_postitems():
     a = backend.postitems(content,request)
     if a[0] == 0:
         return jsonify({"status":"updated"})
-    elif a[0] ==1:
+    if a[0] ==1:
         return jsonify({"status":a[1]}),412
-    else:
-        return jsonify({"status":a[1]}),418
+    return jsonify({"status":a[1]}),418
 
 @app.route('/logs')
 def logs():

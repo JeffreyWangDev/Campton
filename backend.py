@@ -54,8 +54,7 @@ def getnewiid():
     sqlite.close()
     if item is None:
         return link
-    else:
-        return getnewiid()
+    return getnewiid()
 def newseller(request):
     """
     Creates a new seller in the database.
@@ -121,9 +120,7 @@ def getseller(pnum):
     sqlite.close()
     if item:
         return (0,item)
-
-    else:
-        return (1,"Error: Phone number not found")
+    return (1,"Error: Phone number not found")
 
 
 def updateseller(request):
@@ -254,7 +251,7 @@ def updateitem(request, itemname:str):
 
     sellerphone = str(request.form['phonen'])
     itemid = str(request.form['id'])
-    itemprice = request.form['price']
+    ip = request.form['price']
     itemdisc = request.form['dis']
     sold = request.form['sold']
     item_id = request.form['cid']
@@ -297,14 +294,13 @@ def updateitem(request, itemname:str):
                        int(phone),
                        str(a[1]),
                        str(itemid),
-                       int(itemprice),
+                       int(ip),
                        str(itemname),
                        str(itemdisc),
                        sold,str(id)))
     sqlite.commit()
     cursor.close()
     sqlite.close()
-    ip = itemprice
     iname = itemname
     addlog(f"UPDATEITEM: {phone} {str(a[1])} {itemid} {ip} {iname} {itemdisc} {sold} {id}",request)
     return 0
@@ -443,8 +439,7 @@ def getlog(password):
         cursor.close()
         sqlite.close()
         return [1,item]
-    else:
-        return [0,"Wrong Password!"]
+    return [0,"Wrong Password!"]
 def getall():
     """
     Retrieves all data from the database: user information, item information, and log entries.
