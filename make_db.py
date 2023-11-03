@@ -1,8 +1,7 @@
 """Create a database and create tables if they don't exist"""
 import sqlite3 as sl
 
-def make_database:
-
+def make_database():
     acc = sl.connect('main.db')
 
     with acc:

@@ -4,7 +4,7 @@ import werkzeug
 from flask import Flask,redirect,render_template,request,url_for,jsonify, send_file
 #from backend import *
 import backend
-import make as backend_make
+import make_db as backend_make
 app = Flask(__name__)
 
 @app.route('/goto', methods=['GET', 'POST'])
