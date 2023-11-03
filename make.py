@@ -1,4 +1,4 @@
-"""Import database and create tables if they don't exist"""
+"""Create a database and create tables if they don't exist"""
 import sqlite3 as sl
 acc = sl.connect('main.db')
 

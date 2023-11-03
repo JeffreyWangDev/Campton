@@ -1,4 +1,4 @@
-"""Import all necessary modules"""
+"""All backend functions for the website."""
 import sqlite3 as sl
 import random
 import string
