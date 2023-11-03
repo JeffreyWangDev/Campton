@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>skiskate.main API documentation</title>
-<meta name="description" content="&#34;Database for the app" />
+<meta name="description" content="Main file for all code relating to the server" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,12 +22,12 @@
 <h1 class="title">Module <code>skiskate.main</code></h1>
 </header>
 <section id="section-intro">
-<p>"Database for the app</p>
+<p>Main file for all code relating to the server</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;&#34;Database for the app&#34;&#34;&#34;
+<pre><code class="python">&#34;&#34;&#34;Main file for all code relating to the server&#34;&#34;&#34;
 import sqlite3 as sl
 import werkzeug
 from flask import Flask,redirect,render_template,request,url_for,jsonify, send_file
@@ -37,10 +37,12 @@ app = Flask(__name__)
 
 @app.route(&#39;/goto&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def goto():
-    &#34;&#34;&#34;Redirects to the page specified in the url
+    &#34;&#34;&#34;
+    Redirects to the specified route based on the &#39;place&#39; query parameter.
+    If &#39;place&#39; is not provided or the route doesn&#39;t exist, it redirects to the &#39;home&#39; route.
 
     Returns:
-        redirect: redirects to the page specified in the url
+        Flask redirect response.
     &#34;&#34;&#34;
     place = request.args.get(&#39;place&#39;, None)
     try:
@@ -50,22 +52,23 @@ def goto():
 
 @app.route(&#39;/&#39;)
 def home():
-    &#34;&#34;&#34;Home page
+    &#34;&#34;&#34;
+    Renders the &#39;home.html&#39; template with an optional &#39;msg&#39; query parameter.
 
     Returns:
-        None
+        Flask template render response.
     &#34;&#34;&#34;
     msg = request.args.get(&#39;msg&#39;, None)
     return render_template(&#34;home.html&#34;,msg=msg)
 @app.route(&#39;/make&#39;)
 def make():
-    &#34;&#34;&#34;Creates the database
+    &#34;&#34;&#34;
+    Initializes the database tables if they don&#39;t already exist.
 
     Returns:
-        None
+        A simple confirmation message.
     &#34;&#34;&#34;
     acc = sl.connect(&#39;main.db&#39;)
-
     with acc:
         acc.execute(&#34;&#34;&#34;
             CREATE TABLE IF NOT EXISTS user (
@@ -111,10 +114,13 @@ def make():
     return &#34;Done&#34;
 @app.route(&#39;/register&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def register():
-    &#34;&#34;&#34;Registers a new user
+    &#34;&#34;&#34;
+    Handles user registration. Accepts POST requests to register a new user.
+    Displays a registration form and error messages on GET requests.
 
     Returns:
-        Register page
+        - On successful registration, redirects to the &#39;home&#39; route with a success message.
+        - On GET request, renders the &#39;register.html&#39; template with error and message.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     msg = request.args.get(&#39;msg&#39;, None)
@@ -128,10 +134,11 @@ def register():
 
 @app.route(&#39;/r2&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def register2():
-    &#34;&#34;&#34;Register a user 
+    &#34;&#34;&#34;
+    Handles user registration form submission. Goes to &#39;register&#39; with error or success msg.
 
     Returns:
-        Bad stuff
+        Flask redirect response.
     &#34;&#34;&#34;
     error = None
     if request.method == &#39;POST&#39;:
@@ -144,10 +151,12 @@ def register2():
 
 @app.route(&#39;/seller&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def seller():
-    &#34;&#34;&#34;Seller page
+    &#34;&#34;&#34;
+    Handles seller information display and form submission for seller search.
 
     Returns:
-        Information about the seller
+        - On successful seller info retrieval, renders the &#39;user.html&#39; template with seller details.
+        - On error or POST request, renders the &#39;user.html&#39; template with error message.
     &#34;&#34;&#34;
     error = None
     if request.method == &#39;POST&#39;:
@@ -163,7 +172,12 @@ def seller():
 @app.route(&#39;/update&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def update():
     &#34;&#34;&#34;
-    Updates the seller information
+    Handles user profile update. Accepts POST requests to update user information.
+    Displays a user update form and error messages on GET requests.
+
+    Returns:
+        - On successful update, redirects to the &#39;home&#39; route with a success message.
+        - On GET request, renders the &#39;user.html&#39; template for user profile update.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     user = request.args.get(&#39;user&#39;, None)
@@ -185,14 +199,22 @@ def update():
 @app.route(&#39;/u2&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def update2():
     &#34;&#34;&#34;
-    Redirects to the seller page
+    Redirects to the &#39;seller&#39; route.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     return redirect(url_for(&#39;seller&#39;))
 
 @app.route(&#39;/newitem&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def newitem():
     &#34;&#34;&#34;
-    Adds a new item
+    Handles item creation. Accepts POST requests to add a new item.
+    Displays an item creation form and error messages on GET requests.
+
+    Returns:
+        - On successful item creation, redirects to the &#39;home&#39; route with a success message.
+        - On GET request, renders the &#39;newitem.html&#39; template with error and phone information.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     phone = request.args.get(&#39;phone&#39;, None)
@@ -217,7 +239,10 @@ def newitem():
 @app.route(&#39;/i2&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def newitem2():
     &#34;&#34;&#34;
-    Creates a new item
+    Handles item creation form submission. Redirects to &#39;newitem&#39; with error or success msg.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     error = None
     if request.method == &#39;POST&#39;:
@@ -239,7 +264,11 @@ def newitem2():
 @app.route(&#39;/item&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def item():
     &#34;&#34;&#34;
-    Item page
+    Handles item information display and form submission for item search.
+
+    Returns:
+        - On successful item retrieval, renders the &#39;item.html&#39; template with item details.
+        - On error or POST request, renders the &#39;item.html&#39; template with error message.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     item_data = request.args.get(&#39;item&#39;, None)
@@ -274,7 +303,10 @@ def item():
 @app.route(&#39;/itemu&#39;, methods=[ &#39;POST&#39;])
 def itemu():
     &#34;&#34;&#34;
-    Updates the item
+    Handles item update form submission. Redirects to the &#39;item&#39; route with error or success msg.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     if request.method == &#39;POST&#39;:
         if str(request.form[&#39;name&#39;]) == &#34;1&#34;:
@@ -302,7 +334,12 @@ def itemu():
 @app.route(&#39;/report&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def report():
     &#34;&#34;&#34;
-    Generates the report
+    Handles seller report generation and display. Accepts POST requests to generate reports.
+    Displays a report form and error messages on GET requests.
+
+    Returns:
+        - On successful report gen, renders the &#39;reporta.html&#39; template with seller/item info.
+        - On error or POST request, renders the &#39;report.html&#39; template with error message.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     if request.method == &#39;POST&#39;:
@@ -352,7 +389,11 @@ def report():
 @app.route(&#39;/r&#39;, methods=[&#39;POST&#39;])
 def reportapi():
     &#34;&#34;&#34;
-    Seller report api
+    Handles API requests to generate seller reports.
+
+    Returns:
+        - On successful report generation, returns a JSON response with a status message.
+        - On error, returns a JSON response with an error status and code 418.
     &#34;&#34;&#34;
     pnum =request.json[&#34;phone&#34;]
     b = backend.getseller(pnum)
@@ -367,7 +408,10 @@ def reportapi():
 @app.route(&#39;/print_report&#39;)
 def print_report():
     &#34;&#34;&#34;
-    Prints the report
+    Handles seller report printing.
+
+    Returns:
+        Renders the &#39;rec.html&#39; template with seller and item details.
     &#34;&#34;&#34;
     phone = request.args.get(&#39;phone&#39;, None)
     if phone:
@@ -415,20 +459,30 @@ def print_report():
 @app.route(&#39;/print&#39;)
 def print_api():
     &#34;&#34;&#34;
-    Print page after 
+    Redirects to the &#39;report&#39; route for report printing.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     return redirect(url_for(&#34;report&#34;))
 
 @app.route(&#39;/checkout&#39;)
 def checkout():
     &#34;&#34;&#34;
-    Checkout page
+    Renders the &#39;checkout.html&#39; template.
+
+    Returns:
+        Flask template render response.
     &#34;&#34;&#34;
     return render_template(&#34;checkout.html&#34;)
 @app.route(&#39;/api/getitem&#39;)
 def api_getitem():
     &#34;&#34;&#34;
-    Api to get item
+    Handles API requests to retrieve item details.
+
+    Returns:
+        - On successful item retrieval, returns a JSON response with item data.
+        - On error, returns a JSON response with an error status and code 418.
     &#34;&#34;&#34;
     num = request.args.get(&#39;itemnum&#39;, None)
     a = backend.getitem(num)
@@ -436,7 +490,11 @@ def api_getitem():
 @app.route(&#39;/api/postitems&#39;, methods=[&#39;POST&#39;])
 def api_postitems():
     &#34;&#34;&#34;
-    Updates the item
+    Handles API requests to post items.
+
+    Returns:
+        - On successful item update, returns a JSON response with a status message.
+        - On error, returns a JSON response with an error status and code 412 or 418.
     &#34;&#34;&#34;
     content = request.json
     a = backend.postitems(content,request)
@@ -450,14 +508,21 @@ def api_postitems():
 @app.route(&#39;/logs&#39;)
 def logs():
     &#34;&#34;&#34;
-    Logs page
+    Renders the &#39;logs.html&#39; template.
+
+    Returns:
+        Flask template render response.
     &#34;&#34;&#34;
     return render_template(&#34;logs.html&#34;)
 
 @app.route(&#39;/api/getlog&#39;, methods=[&#39;POST&#39;])
 def api_getlog():
     &#34;&#34;&#34;
-    Gets the log
+    Handles API requests to retrieve logs.
+
+    Returns:
+        - On successful log retrieval, returns a JSON response with log data.
+        - On error, returns a JSON response with an error status and code 418.
     &#34;&#34;&#34;
     a=backend.getlog(request.json[&#34;password&#34;])
     if a[0]==1:
@@ -468,7 +533,10 @@ def api_getlog():
 @app.route(&#39;/api/db&#39;)
 def api_downloadlog():
     &#34;&#34;&#34;
-    Downloads the database
+    Handles API requests to download database logs.
+
+    Returns:
+        Renders the &#39;down.html&#39; template for download.
     &#34;&#34;&#34;
     a = backend.getall()
     things = [&#34;user&#34;,&#34;items&#34;,&#34;log&#34;]
@@ -490,8 +558,17 @@ def api_downloadlog():
 @app.route(&#39;/down/&lt;filename&gt;&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def download(filename):
     &#34;&#34;&#34;
-    Downloads the file
+    Handles file download requests.
+
+    Args:
+        filename (str): Name of the file to be downloaded.
+
+    Returns:
+        - On success, serves the requested file for download.
+        - On error (file not found), returns an error message.
     &#34;&#34;&#34;
+    if filename not in [&#34;user.csv&#34;,&#34;items.csv&#34;,&#34;log.csv&#34;]:
+        return &#34;File does not exist&#34;
     try:
         return send_file(f&#34;./download/{filename}&#34;)
     except FileNotFoundError:
@@ -500,14 +577,20 @@ def download(filename):
 @app.route(&#34;/download/database&#34;)
 def download_db():
     &#34;&#34;&#34;
-    Downloads the raw database
+    Handles database download requests.
+
+    Returns:
+        Serves the main database file for download.
     &#34;&#34;&#34;
     return send_file(&#34;main.db&#34;)
 
 @app.route(&#34;/admin&#34;)
 def admin():
     &#34;&#34;&#34;
-    Admin page
+    Renders the &#39;admin.html&#39; template.
+
+    Returns:
+        Flask template render response.
     &#34;&#34;&#34;
     return render_template(&#34;admin.html&#34;)
 
@@ -526,7 +609,9 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">admin</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Admin page</p></div>
+<div class="desc"><p>Renders the 'admin.html' template.</p>
+<h2 id="returns">Returns</h2>
+<p>Flask template render response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -534,7 +619,10 @@ if __name__ == &#34;__main__&#34;:
 <pre><code class="python">@app.route(&#34;/admin&#34;)
 def admin():
     &#34;&#34;&#34;
-    Admin page
+    Renders the &#39;admin.html&#39; template.
+
+    Returns:
+        Flask template render response.
     &#34;&#34;&#34;
     return render_template(&#34;admin.html&#34;)</code></pre>
 </details>
@@ -543,7 +631,9 @@ def admin():
 <span>def <span class="ident">api_downloadlog</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Downloads the database</p></div>
+<div class="desc"><p>Handles API requests to download database logs.</p>
+<h2 id="returns">Returns</h2>
+<p>Renders the 'down.html' template for download.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -551,7 +641,10 @@ def admin():
 <pre><code class="python">@app.route(&#39;/api/db&#39;)
 def api_downloadlog():
     &#34;&#34;&#34;
-    Downloads the database
+    Handles API requests to download database logs.
+
+    Returns:
+        Renders the &#39;down.html&#39; template for download.
     &#34;&#34;&#34;
     a = backend.getall()
     things = [&#34;user&#34;,&#34;items&#34;,&#34;log&#34;]
@@ -576,7 +669,12 @@ def api_downloadlog():
 <span>def <span class="ident">api_getitem</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Api to get item</p></div>
+<div class="desc"><p>Handles API requests to retrieve item details.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful item retrieval, returns a JSON response with item data.</li>
+<li>On error, returns a JSON response with an error status and code 418.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -584,7 +682,11 @@ def api_downloadlog():
 <pre><code class="python">@app.route(&#39;/api/getitem&#39;)
 def api_getitem():
     &#34;&#34;&#34;
-    Api to get item
+    Handles API requests to retrieve item details.
+
+    Returns:
+        - On successful item retrieval, returns a JSON response with item data.
+        - On error, returns a JSON response with an error status and code 418.
     &#34;&#34;&#34;
     num = request.args.get(&#39;itemnum&#39;, None)
     a = backend.getitem(num)
@@ -595,7 +697,12 @@ def api_getitem():
 <span>def <span class="ident">api_getlog</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Gets the log</p></div>
+<div class="desc"><p>Handles API requests to retrieve logs.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful log retrieval, returns a JSON response with log data.</li>
+<li>On error, returns a JSON response with an error status and code 418.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -603,7 +710,11 @@ def api_getitem():
 <pre><code class="python">@app.route(&#39;/api/getlog&#39;, methods=[&#39;POST&#39;])
 def api_getlog():
     &#34;&#34;&#34;
-    Gets the log
+    Handles API requests to retrieve logs.
+
+    Returns:
+        - On successful log retrieval, returns a JSON response with log data.
+        - On error, returns a JSON response with an error status and code 418.
     &#34;&#34;&#34;
     a=backend.getlog(request.json[&#34;password&#34;])
     if a[0]==1:
@@ -615,7 +726,12 @@ def api_getlog():
 <span>def <span class="ident">api_postitems</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Updates the item</p></div>
+<div class="desc"><p>Handles API requests to post items.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful item update, returns a JSON response with a status message.</li>
+<li>On error, returns a JSON response with an error status and code 412 or 418.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -623,7 +739,11 @@ def api_getlog():
 <pre><code class="python">@app.route(&#39;/api/postitems&#39;, methods=[&#39;POST&#39;])
 def api_postitems():
     &#34;&#34;&#34;
-    Updates the item
+    Handles API requests to post items.
+
+    Returns:
+        - On successful item update, returns a JSON response with a status message.
+        - On error, returns a JSON response with an error status and code 412 or 418.
     &#34;&#34;&#34;
     content = request.json
     a = backend.postitems(content,request)
@@ -639,7 +759,9 @@ def api_postitems():
 <span>def <span class="ident">checkout</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Checkout page</p></div>
+<div class="desc"><p>Renders the 'checkout.html' template.</p>
+<h2 id="returns">Returns</h2>
+<p>Flask template render response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -647,7 +769,10 @@ def api_postitems():
 <pre><code class="python">@app.route(&#39;/checkout&#39;)
 def checkout():
     &#34;&#34;&#34;
-    Checkout page
+    Renders the &#39;checkout.html&#39; template.
+
+    Returns:
+        Flask template render response.
     &#34;&#34;&#34;
     return render_template(&#34;checkout.html&#34;)</code></pre>
 </details>
@@ -656,7 +781,17 @@ def checkout():
 <span>def <span class="ident">download</span></span>(<span>filename)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Downloads the file</p></div>
+<div class="desc"><p>Handles file download requests.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the file to be downloaded.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On success, serves the requested file for download.</li>
+<li>On error (file not found), returns an error message.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -664,8 +799,17 @@ def checkout():
 <pre><code class="python">@app.route(&#39;/down/&lt;filename&gt;&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def download(filename):
     &#34;&#34;&#34;
-    Downloads the file
+    Handles file download requests.
+
+    Args:
+        filename (str): Name of the file to be downloaded.
+
+    Returns:
+        - On success, serves the requested file for download.
+        - On error (file not found), returns an error message.
     &#34;&#34;&#34;
+    if filename not in [&#34;user.csv&#34;,&#34;items.csv&#34;,&#34;log.csv&#34;]:
+        return &#34;File does not exist&#34;
     try:
         return send_file(f&#34;./download/{filename}&#34;)
     except FileNotFoundError:
@@ -676,7 +820,9 @@ def download(filename):
 <span>def <span class="ident">download_db</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Downloads the raw database</p></div>
+<div class="desc"><p>Handles database download requests.</p>
+<h2 id="returns">Returns</h2>
+<p>Serves the main database file for download.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -684,7 +830,10 @@ def download(filename):
 <pre><code class="python">@app.route(&#34;/download/database&#34;)
 def download_db():
     &#34;&#34;&#34;
-    Downloads the raw database
+    Handles database download requests.
+
+    Returns:
+        Serves the main database file for download.
     &#34;&#34;&#34;
     return send_file(&#34;main.db&#34;)</code></pre>
 </details>
@@ -693,22 +842,22 @@ def download_db():
 <span>def <span class="ident">goto</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Redirects to the page specified in the url</p>
+<div class="desc"><p>Redirects to the specified route based on the 'place' query parameter.
+If 'place' is not provided or the route doesn't exist, it redirects to the 'home' route.</p>
 <h2 id="returns">Returns</h2>
-<dl>
-<dt><code>redirect</code></dt>
-<dd>redirects to the page specified in the url</dd>
-</dl></div>
+<p>Flask redirect response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/goto&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def goto():
-    &#34;&#34;&#34;Redirects to the page specified in the url
+    &#34;&#34;&#34;
+    Redirects to the specified route based on the &#39;place&#39; query parameter.
+    If &#39;place&#39; is not provided or the route doesn&#39;t exist, it redirects to the &#39;home&#39; route.
 
     Returns:
-        redirect: redirects to the page specified in the url
+        Flask redirect response.
     &#34;&#34;&#34;
     place = request.args.get(&#39;place&#39;, None)
     try:
@@ -721,19 +870,20 @@ def goto():
 <span>def <span class="ident">home</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Home page</p>
+<div class="desc"><p>Renders the 'home.html' template with an optional 'msg' query parameter.</p>
 <h2 id="returns">Returns</h2>
-<p>None</p></div>
+<p>Flask template render response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/&#39;)
 def home():
-    &#34;&#34;&#34;Home page
+    &#34;&#34;&#34;
+    Renders the &#39;home.html&#39; template with an optional &#39;msg&#39; query parameter.
 
     Returns:
-        None
+        Flask template render response.
     &#34;&#34;&#34;
     msg = request.args.get(&#39;msg&#39;, None)
     return render_template(&#34;home.html&#34;,msg=msg)</code></pre>
@@ -743,7 +893,12 @@ def home():
 <span>def <span class="ident">item</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Item page</p></div>
+<div class="desc"><p>Handles item information display and form submission for item search.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful item retrieval, renders the 'item.html' template with item details.</li>
+<li>On error or POST request, renders the 'item.html' template with error message.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -751,7 +906,11 @@ def home():
 <pre><code class="python">@app.route(&#39;/item&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def item():
     &#34;&#34;&#34;
-    Item page
+    Handles item information display and form submission for item search.
+
+    Returns:
+        - On successful item retrieval, renders the &#39;item.html&#39; template with item details.
+        - On error or POST request, renders the &#39;item.html&#39; template with error message.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     item_data = request.args.get(&#39;item&#39;, None)
@@ -788,7 +947,9 @@ def item():
 <span>def <span class="ident">itemu</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Updates the item</p></div>
+<div class="desc"><p>Handles item update form submission. Redirects to the 'item' route with error or success msg.</p>
+<h2 id="returns">Returns</h2>
+<p>Flask redirect response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -796,7 +957,10 @@ def item():
 <pre><code class="python">@app.route(&#39;/itemu&#39;, methods=[ &#39;POST&#39;])
 def itemu():
     &#34;&#34;&#34;
-    Updates the item
+    Handles item update form submission. Redirects to the &#39;item&#39; route with error or success msg.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     if request.method == &#39;POST&#39;:
         if str(request.form[&#39;name&#39;]) == &#34;1&#34;:
@@ -826,7 +990,9 @@ def itemu():
 <span>def <span class="ident">logs</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Logs page</p></div>
+<div class="desc"><p>Renders the 'logs.html' template.</p>
+<h2 id="returns">Returns</h2>
+<p>Flask template render response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -834,7 +1000,10 @@ def itemu():
 <pre><code class="python">@app.route(&#39;/logs&#39;)
 def logs():
     &#34;&#34;&#34;
-    Logs page
+    Renders the &#39;logs.html&#39; template.
+
+    Returns:
+        Flask template render response.
     &#34;&#34;&#34;
     return render_template(&#34;logs.html&#34;)</code></pre>
 </details>
@@ -843,22 +1012,22 @@ def logs():
 <span>def <span class="ident">make</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Creates the database</p>
+<div class="desc"><p>Initializes the database tables if they don't already exist.</p>
 <h2 id="returns">Returns</h2>
-<p>None</p></div>
+<p>A simple confirmation message.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/make&#39;)
 def make():
-    &#34;&#34;&#34;Creates the database
+    &#34;&#34;&#34;
+    Initializes the database tables if they don&#39;t already exist.
 
     Returns:
-        None
+        A simple confirmation message.
     &#34;&#34;&#34;
     acc = sl.connect(&#39;main.db&#39;)
-
     with acc:
         acc.execute(&#34;&#34;&#34;
             CREATE TABLE IF NOT EXISTS user (
@@ -908,7 +1077,13 @@ def make():
 <span>def <span class="ident">newitem</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Adds a new item</p></div>
+<div class="desc"><p>Handles item creation. Accepts POST requests to add a new item.
+Displays an item creation form and error messages on GET requests.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful item creation, redirects to the 'home' route with a success message.</li>
+<li>On GET request, renders the 'newitem.html' template with error and phone information.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -916,7 +1091,12 @@ def make():
 <pre><code class="python">@app.route(&#39;/newitem&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def newitem():
     &#34;&#34;&#34;
-    Adds a new item
+    Handles item creation. Accepts POST requests to add a new item.
+    Displays an item creation form and error messages on GET requests.
+
+    Returns:
+        - On successful item creation, redirects to the &#39;home&#39; route with a success message.
+        - On GET request, renders the &#39;newitem.html&#39; template with error and phone information.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     phone = request.args.get(&#39;phone&#39;, None)
@@ -943,7 +1123,9 @@ def newitem():
 <span>def <span class="ident">newitem2</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Creates a new item</p></div>
+<div class="desc"><p>Handles item creation form submission. Redirects to 'newitem' with error or success msg.</p>
+<h2 id="returns">Returns</h2>
+<p>Flask redirect response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -951,7 +1133,10 @@ def newitem():
 <pre><code class="python">@app.route(&#39;/i2&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def newitem2():
     &#34;&#34;&#34;
-    Creates a new item
+    Handles item creation form submission. Redirects to &#39;newitem&#39; with error or success msg.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     error = None
     if request.method == &#39;POST&#39;:
@@ -975,7 +1160,9 @@ def newitem2():
 <span>def <span class="ident">print_api</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Print page after</p></div>
+<div class="desc"><p>Redirects to the 'report' route for report printing.</p>
+<h2 id="returns">Returns</h2>
+<p>Flask redirect response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -983,7 +1170,10 @@ def newitem2():
 <pre><code class="python">@app.route(&#39;/print&#39;)
 def print_api():
     &#34;&#34;&#34;
-    Print page after 
+    Redirects to the &#39;report&#39; route for report printing.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     return redirect(url_for(&#34;report&#34;))</code></pre>
 </details>
@@ -992,7 +1182,9 @@ def print_api():
 <span>def <span class="ident">print_report</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Prints the report</p></div>
+<div class="desc"><p>Handles seller report printing.</p>
+<h2 id="returns">Returns</h2>
+<p>Renders the 'rec.html' template with seller and item details.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1000,7 +1192,10 @@ def print_api():
 <pre><code class="python">@app.route(&#39;/print_report&#39;)
 def print_report():
     &#34;&#34;&#34;
-    Prints the report
+    Handles seller report printing.
+
+    Returns:
+        Renders the &#39;rec.html&#39; template with seller and item details.
     &#34;&#34;&#34;
     phone = request.args.get(&#39;phone&#39;, None)
     if phone:
@@ -1051,19 +1246,26 @@ def print_report():
 <span>def <span class="ident">register</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Registers a new user</p>
+<div class="desc"><p>Handles user registration. Accepts POST requests to register a new user.
+Displays a registration form and error messages on GET requests.</p>
 <h2 id="returns">Returns</h2>
-<p>Register page</p></div>
+<ul>
+<li>On successful registration, redirects to the 'home' route with a success message.</li>
+<li>On GET request, renders the 'register.html' template with error and message.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/register&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def register():
-    &#34;&#34;&#34;Registers a new user
+    &#34;&#34;&#34;
+    Handles user registration. Accepts POST requests to register a new user.
+    Displays a registration form and error messages on GET requests.
 
     Returns:
-        Register page
+        - On successful registration, redirects to the &#39;home&#39; route with a success message.
+        - On GET request, renders the &#39;register.html&#39; template with error and message.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     msg = request.args.get(&#39;msg&#39;, None)
@@ -1080,19 +1282,20 @@ def register():
 <span>def <span class="ident">register2</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Register a user </p>
+<div class="desc"><p>Handles user registration form submission. Goes to 'register' with error or success msg.</p>
 <h2 id="returns">Returns</h2>
-<p>Bad stuff</p></div>
+<p>Flask redirect response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/r2&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def register2():
-    &#34;&#34;&#34;Register a user 
+    &#34;&#34;&#34;
+    Handles user registration form submission. Goes to &#39;register&#39; with error or success msg.
 
     Returns:
-        Bad stuff
+        Flask redirect response.
     &#34;&#34;&#34;
     error = None
     if request.method == &#39;POST&#39;:
@@ -1108,7 +1311,13 @@ def register2():
 <span>def <span class="ident">report</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Generates the report</p></div>
+<div class="desc"><p>Handles seller report generation and display. Accepts POST requests to generate reports.
+Displays a report form and error messages on GET requests.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful report gen, renders the 'reporta.html' template with seller/item info.</li>
+<li>On error or POST request, renders the 'report.html' template with error message.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1116,7 +1325,12 @@ def register2():
 <pre><code class="python">@app.route(&#39;/report&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def report():
     &#34;&#34;&#34;
-    Generates the report
+    Handles seller report generation and display. Accepts POST requests to generate reports.
+    Displays a report form and error messages on GET requests.
+
+    Returns:
+        - On successful report gen, renders the &#39;reporta.html&#39; template with seller/item info.
+        - On error or POST request, renders the &#39;report.html&#39; template with error message.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     if request.method == &#39;POST&#39;:
@@ -1168,7 +1382,12 @@ def report():
 <span>def <span class="ident">reportapi</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Seller report api</p></div>
+<div class="desc"><p>Handles API requests to generate seller reports.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful report generation, returns a JSON response with a status message.</li>
+<li>On error, returns a JSON response with an error status and code 418.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1176,7 +1395,11 @@ def report():
 <pre><code class="python">@app.route(&#39;/r&#39;, methods=[&#39;POST&#39;])
 def reportapi():
     &#34;&#34;&#34;
-    Seller report api
+    Handles API requests to generate seller reports.
+
+    Returns:
+        - On successful report generation, returns a JSON response with a status message.
+        - On error, returns a JSON response with an error status and code 418.
     &#34;&#34;&#34;
     pnum =request.json[&#34;phone&#34;]
     b = backend.getseller(pnum)
@@ -1193,19 +1416,24 @@ def reportapi():
 <span>def <span class="ident">seller</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Seller page</p>
+<div class="desc"><p>Handles seller information display and form submission for seller search.</p>
 <h2 id="returns">Returns</h2>
-<p>Information about the seller</p></div>
+<ul>
+<li>On successful seller info retrieval, renders the 'user.html' template with seller details.</li>
+<li>On error or POST request, renders the 'user.html' template with error message.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#39;/seller&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def seller():
-    &#34;&#34;&#34;Seller page
+    &#34;&#34;&#34;
+    Handles seller information display and form submission for seller search.
 
     Returns:
-        Information about the seller
+        - On successful seller info retrieval, renders the &#39;user.html&#39; template with seller details.
+        - On error or POST request, renders the &#39;user.html&#39; template with error message.
     &#34;&#34;&#34;
     error = None
     if request.method == &#39;POST&#39;:
@@ -1223,7 +1451,13 @@ def seller():
 <span>def <span class="ident">update</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Updates the seller information</p></div>
+<div class="desc"><p>Handles user profile update. Accepts POST requests to update user information.
+Displays a user update form and error messages on GET requests.</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>On successful update, redirects to the 'home' route with a success message.</li>
+<li>On GET request, renders the 'user.html' template for user profile update.</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1231,7 +1465,12 @@ def seller():
 <pre><code class="python">@app.route(&#39;/update&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def update():
     &#34;&#34;&#34;
-    Updates the seller information
+    Handles user profile update. Accepts POST requests to update user information.
+    Displays a user update form and error messages on GET requests.
+
+    Returns:
+        - On successful update, redirects to the &#39;home&#39; route with a success message.
+        - On GET request, renders the &#39;user.html&#39; template for user profile update.
     &#34;&#34;&#34;
     error = request.args.get(&#39;error&#39;, None)
     user = request.args.get(&#39;user&#39;, None)
@@ -1255,7 +1494,9 @@ def update():
 <span>def <span class="ident">update2</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Redirects to the seller page</p></div>
+<div class="desc"><p>Redirects to the 'seller' route.</p>
+<h2 id="returns">Returns</h2>
+<p>Flask redirect response.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1263,7 +1504,10 @@ def update():
 <pre><code class="python">@app.route(&#39;/u2&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
 def update2():
     &#34;&#34;&#34;
-    Redirects to the seller page
+    Redirects to the &#39;seller&#39; route.
+
+    Returns:
+        Flask redirect response.
     &#34;&#34;&#34;
     return redirect(url_for(&#39;seller&#39;))</code></pre>
 </details>
