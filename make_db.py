@@ -2,6 +2,12 @@
 import sqlite3 as sl
 
 def make_database():
+    """
+    Makes a database and creates tables if they don't exist
+
+    Returns:
+        Nonea
+    """
     acc = sl.connect('main.db')
 
     with acc:

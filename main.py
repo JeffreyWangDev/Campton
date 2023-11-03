@@ -1,5 +1,4 @@
 """Main file for all code relating to the server"""
-import sqlite3 as sl
 import werkzeug
 from flask import Flask,redirect,render_template,request,url_for,jsonify, send_file
 #from backend import *
