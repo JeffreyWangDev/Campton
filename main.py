@@ -8,11 +8,7 @@ app = Flask(__name__)
 
 @app.route('/goto', methods=['GET', 'POST'])
 def goto():
-    """Redirects to the page specified in the url
 
-    Returns:
-        redirect: redirects to the page specified in the url
-    """
     place = request.args.get('place', None)
     try:
         return redirect(url_for(place))
@@ -21,20 +17,12 @@ def goto():
 
 @app.route('/')
 def home():
-    """Home page
 
-    Returns:
-        None
-    """
     msg = request.args.get('msg', None)
     return render_template("home.html",msg=msg)
 @app.route('/make')
 def make():
-    """Creates the database
 
-    Returns:
-        None
-    """
     acc = sl.connect('main.db')
 
     with acc:
@@ -82,11 +70,7 @@ def make():
     return "Done"
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """Registers a new user
 
-    Returns:
-        Register page
-    """
     error = request.args.get('error', None)
     msg = request.args.get('msg', None)
     if request.method == 'POST':
@@ -99,11 +83,7 @@ def register():
 
 @app.route('/r2', methods=['GET', 'POST'])
 def register2():
-    """Register a user 
 
-    Returns:
-        Bad stuff
-    """
     error = None
     if request.method == 'POST':
         a = backend.newseller(request)
@@ -115,11 +95,7 @@ def register2():
 
 @app.route('/seller', methods=['GET', 'POST'])
 def seller():
-    """Seller page
 
-    Returns:
-        Information about the seller
-    """
     error = None
     if request.method == 'POST':
         a = list(backend.getseller(request.form['phonenn']))
@@ -133,9 +109,7 @@ def seller():
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
-    """
-    Updates the seller information
-    """
+
     error = request.args.get('error', None)
     user = request.args.get('user', None)
     if request.method == 'POST':
@@ -155,16 +129,12 @@ def update():
 
 @app.route('/u2', methods=['GET', 'POST'])
 def update2():
-    """
-    Redirects to the seller page
-    """
+
     return redirect(url_for('seller'))
 
 @app.route('/newitem', methods=['GET', 'POST'])
 def newitem():
-    """
-    Adds a new item
-    """
+
     error = request.args.get('error', None)
     phone = request.args.get('phone', None)
     msg = request.args.get('msg', None)
@@ -187,9 +157,7 @@ def newitem():
 
 @app.route('/i2', methods=['GET', 'POST'])
 def newitem2():
-    """
-    Creates a new item
-    """
+
     error = None
     if request.method == 'POST':
         if str(request.form['name']) == "1":
@@ -209,9 +177,7 @@ def newitem2():
 
 @app.route('/item', methods=['GET', 'POST'])
 def item():
-    """
-    Item page
-    """
+
     error = request.args.get('error', None)
     item_data = request.args.get('item', None)
     try:
@@ -244,9 +210,7 @@ def item():
 
 @app.route('/itemu', methods=[ 'POST'])
 def itemu():
-    """
-    Updates the item
-    """
+
     if request.method == 'POST':
         if str(request.form['name']) == "1":
             name = request.form['tname']
@@ -272,9 +236,7 @@ def itemu():
 
 @app.route('/report', methods=['GET', 'POST'])
 def report():
-    """
-    Generates the report
-    """
+
     error = request.args.get('error', None)
     if request.method == 'POST':
         a =backend.getreport(request.form['phonen'])
@@ -322,9 +284,7 @@ def report():
 
 @app.route('/r', methods=['POST'])
 def reportapi():
-    """
-    Seller report api
-    """
+
     pnum =request.json["phone"]
     b = backend.getseller(pnum)
     if b[1][8]:
@@ -337,9 +297,7 @@ def reportapi():
 
 @app.route('/print_report')
 def print_report():
-    """
-    Prints the report
-    """
+
     phone = request.args.get('phone', None)
     if phone:
         a =backend.getreport(phone)
@@ -385,30 +343,22 @@ def print_report():
     return redirect(url_for("report"))
 @app.route('/print')
 def print_api():
-    """
-    Print page after 
-    """
+
     return redirect(url_for("report"))
 
 @app.route('/checkout')
 def checkout():
-    """
-    Checkout page
-    """
+
     return render_template("checkout.html")
 @app.route('/api/getitem')
 def api_getitem():
-    """
-    Api to get item
-    """
+
     num = request.args.get('itemnum', None)
     a = backend.getitem(num)
     return({"res":a[0],"data":a[1]})
 @app.route('/api/postitems', methods=['POST'])
 def api_postitems():
-    """
-    Updates the item
-    """
+
     content = request.json
     a = backend.postitems(content,request)
     if a[0] == 0:
@@ -420,16 +370,12 @@ def api_postitems():
 
 @app.route('/logs')
 def logs():
-    """
-    Logs page
-    """
+
     return render_template("logs.html")
 
 @app.route('/api/getlog', methods=['POST'])
 def api_getlog():
-    """
-    Gets the log
-    """
+
     a=backend.getlog(request.json["password"])
     if a[0]==1:
         return({"res":a[0],"data":a[1]})
@@ -438,9 +384,7 @@ def api_getlog():
 
 @app.route('/api/db')
 def api_downloadlog():
-    """
-    Downloads the database
-    """
+
     a = backend.getall()
     things = ["user","items","log"]
     count = 0
@@ -460,9 +404,7 @@ def api_downloadlog():
     return render_template("down.html")
 @app.route('/down/<filename>', methods=['GET', 'POST'])
 def download(filename):
-    """
-    Downloads the file
-    """
+
     if filename not in ["user.csv","items.csv","log.csv"]:
         return "File does not exist"
     try:
@@ -472,16 +414,12 @@ def download(filename):
 
 @app.route("/download/database")
 def download_db():
-    """
-    Downloads the raw database
-    """
+
     return send_file("main.db")
 
 @app.route("/admin")
 def admin():
-    """
-    Admin page
-    """
+
     return render_template("admin.html")
 
 if __name__ == "__main__":
