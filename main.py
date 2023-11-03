@@ -247,7 +247,7 @@ def item():
             pass
         else:
             raise ValueError
-    except (ValueError, IndexError):
+    except (ValueError, IndexError, AttributeError):
         item_data = None
     if item_data:
         return render_template('item.html',item = item_data,ierror=error)
@@ -312,7 +312,7 @@ def report():
     """
     error = request.args.get('error', None)
     if request.method == 'POST':
-        a =backend.getreport(request.form['phonen'])
+        a = backend.getreport(request.form['phonen'])
         b = backend.getseller(request.form['phonen'])
         max_amount = 0
         notsold = 0

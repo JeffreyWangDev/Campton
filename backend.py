@@ -115,7 +115,10 @@ def getseller(pnum):
     phone = str(pnum.replace(" ",""))
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
-    item = cursor.execute("SELECT * FROM user WHERE phone = ?", (int(phone),)).fetchone()
+    try:
+        item = cursor.execute("SELECT * FROM user WHERE phone = ?", (int(phone),)).fetchone()
+    except ValueError:
+        return (1,"Error: Phone number invalid")
     cursor.close()
     sqlite.close()
     if item:
