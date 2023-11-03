@@ -37,8 +37,7 @@ def getnewid():
     sqlite.close()
     if item is None:
         return link
-    else:
-        return getnewid()
+    return getnewid()
 def getnewiid():
     """
     Generates a new unique item ID.
