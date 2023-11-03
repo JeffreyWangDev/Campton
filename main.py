@@ -1,9 +1,9 @@
 """Main file for all code relating to the server"""
-import sqlite3 as sl
 import werkzeug
 from flask import Flask,redirect,render_template,request,url_for,jsonify, send_file
 #from backend import *
 import backend
+import make_db as backend_make
 app = Flask(__name__)
 
 @app.route('/goto', methods=['GET', 'POST'])
@@ -39,48 +39,7 @@ def make():
     Returns:
         A simple confirmation message.
     """
-    acc = sl.connect('main.db')
-    with acc:
-        acc.execute("""
-            CREATE TABLE IF NOT EXISTS user (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                sellerid TEXT NOT NULL,
-                phone INTEGER NOT NULL,
-                name TEXT,
-                address TEXT, 
-                city TEXT,
-                state TEXT,
-                zip TEXT,
-                paid INTEGER
-            );
-        """)
-
-    with acc:
-        acc.execute("""
-            CREATE TABLE IF NOT EXISTS items (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                sellerphone INTEGER NOT NULL,
-                sellerid TEXT NOT NULL, 
-                itemid TEXT NOT NULL, 
-                itemprice INTEGER NOT NULL, 
-                itemname TEXT NOT NULL,
-                itemdisc TEXT,
-                itemstatus INTEGER NOT NULL,
-                itemcid TEXT NOT NULL
-            );
-        """)
-
-
-    with acc:
-        acc.execute("""
-            CREATE TABLE IF NOT EXISTS log (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                event STRING,
-                ip STRING,
-                useragent STRING,
-                time INTGER
-            );
-        """)
+    backend_make.make_database()
 
     return "Done"
 @app.route('/register', methods=['GET', 'POST'])
