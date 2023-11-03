@@ -8,7 +8,13 @@ app = Flask(__name__)
 
 @app.route('/goto', methods=['GET', 'POST'])
 def goto():
+    """
+    Redirects to the specified route based on the 'place' query parameter.
+    If 'place' is not provided or the route doesn't exist, it redirects to the 'home' route.
 
+    Returns:
+        Flask redirect response.
+    """
     place = request.args.get('place', None)
     try:
         return redirect(url_for(place))
@@ -17,14 +23,23 @@ def goto():
 
 @app.route('/')
 def home():
+    """
+    Renders the 'home.html' template with an optional 'msg' query parameter.
 
+    Returns:
+        Flask template render response.
+    """
     msg = request.args.get('msg', None)
     return render_template("home.html",msg=msg)
 @app.route('/make')
 def make():
+    """
+    Initializes the database tables if they don't already exist.
 
+    Returns:
+        A simple confirmation message.
+    """
     acc = sl.connect('main.db')
-
     with acc:
         acc.execute("""
             CREATE TABLE IF NOT EXISTS user (
@@ -70,7 +85,14 @@ def make():
     return "Done"
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Handles user registration. Accepts POST requests to register a new user.
+    Displays a registration form and error messages on GET requests.
 
+    Returns:
+        - On successful registration, redirects to the 'home' route with a success message.
+        - On GET request, renders the 'register.html' template with error and message.
+    """
     error = request.args.get('error', None)
     msg = request.args.get('msg', None)
     if request.method == 'POST':
@@ -83,7 +105,12 @@ def register():
 
 @app.route('/r2', methods=['GET', 'POST'])
 def register2():
+    """
+    Handles user registration form submission. Redirects to the 'register' route with error or success message.
 
+    Returns:
+        Flask redirect response.
+    """
     error = None
     if request.method == 'POST':
         a = backend.newseller(request)
@@ -95,7 +122,13 @@ def register2():
 
 @app.route('/seller', methods=['GET', 'POST'])
 def seller():
+    """
+    Handles seller information display and form submission for seller search.
 
+    Returns:
+        - On successful seller info retrieval, renders the 'user.html' template with seller details.
+        - On error or POST request, renders the 'user.html' template with error message.
+    """
     error = None
     if request.method == 'POST':
         a = list(backend.getseller(request.form['phonenn']))
@@ -109,7 +142,14 @@ def seller():
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
+    """
+    Handles user profile update. Accepts POST requests to update user information.
+    Displays a user update form and error messages on GET requests.
 
+    Returns:
+        - On successful update, redirects to the 'home' route with a success message.
+        - On GET request, renders the 'user.html' template for user profile update.
+    """
     error = request.args.get('error', None)
     user = request.args.get('user', None)
     if request.method == 'POST':
@@ -129,12 +169,24 @@ def update():
 
 @app.route('/u2', methods=['GET', 'POST'])
 def update2():
+    """
+    Redirects to the 'seller' route.
 
+    Returns:
+        Flask redirect response.
+    """
     return redirect(url_for('seller'))
 
 @app.route('/newitem', methods=['GET', 'POST'])
 def newitem():
+    """
+    Handles item creation. Accepts POST requests to add a new item.
+    Displays an item creation form and error messages on GET requests.
 
+    Returns:
+        - On successful item creation, redirects to the 'home' route with a success message.
+        - On GET request, renders the 'newitem.html' template with error and phone information.
+    """
     error = request.args.get('error', None)
     phone = request.args.get('phone', None)
     msg = request.args.get('msg', None)
@@ -157,7 +209,12 @@ def newitem():
 
 @app.route('/i2', methods=['GET', 'POST'])
 def newitem2():
+    """
+    Handles item creation form submission. Redirects to the 'newitem' route with error or success message.
 
+    Returns:
+        Flask redirect response.
+    """
     error = None
     if request.method == 'POST':
         if str(request.form['name']) == "1":
@@ -177,7 +234,13 @@ def newitem2():
 
 @app.route('/item', methods=['GET', 'POST'])
 def item():
+    """
+    Handles item information display and form submission for item search.
 
+    Returns:
+        - On successful item retrieval, renders the 'item.html' template with item details.
+        - On error or POST request, renders the 'item.html' template with error message.
+    """
     error = request.args.get('error', None)
     item_data = request.args.get('item', None)
     try:
@@ -210,7 +273,12 @@ def item():
 
 @app.route('/itemu', methods=[ 'POST'])
 def itemu():
+    """
+    Handles item update form submission. Redirects to the 'item' route with error or success message.
 
+    Returns:
+        Flask redirect response.
+    """
     if request.method == 'POST':
         if str(request.form['name']) == "1":
             name = request.form['tname']
@@ -236,7 +304,14 @@ def itemu():
 
 @app.route('/report', methods=['GET', 'POST'])
 def report():
+    """
+    Handles seller report generation and display. Accepts POST requests to generate reports.
+    Displays a report form and error messages on GET requests.
 
+    Returns:
+        - On successful report generation, renders the 'reporta.html' template with seller and item details.
+        - On error or POST request, renders the 'report.html' template with error message.
+    """
     error = request.args.get('error', None)
     if request.method == 'POST':
         a =backend.getreport(request.form['phonen'])
@@ -284,7 +359,13 @@ def report():
 
 @app.route('/r', methods=['POST'])
 def reportapi():
+    """
+    Handles API requests to generate seller reports.
 
+    Returns:
+        - On successful report generation, returns a JSON response with a status message.
+        - On error, returns a JSON response with an error status and code 418.
+    """
     pnum =request.json["phone"]
     b = backend.getseller(pnum)
     if b[1][8]:
@@ -297,7 +378,12 @@ def reportapi():
 
 @app.route('/print_report')
 def print_report():
+    """
+    Handles seller report printing.
 
+    Returns:
+        Renders the 'rec.html' template with seller and item details.
+    """
     phone = request.args.get('phone', None)
     if phone:
         a =backend.getreport(phone)
@@ -343,22 +429,44 @@ def print_report():
     return redirect(url_for("report"))
 @app.route('/print')
 def print_api():
+    """
+    Redirects to the 'report' route for report printing.
 
+    Returns:
+        Flask redirect response.
+    """
     return redirect(url_for("report"))
 
 @app.route('/checkout')
 def checkout():
+    """
+    Renders the 'checkout.html' template.
 
+    Returns:
+        Flask template render response.
+    """
     return render_template("checkout.html")
 @app.route('/api/getitem')
 def api_getitem():
+    """
+    Handles API requests to retrieve item details.
 
+    Returns:
+        - On successful item retrieval, returns a JSON response with item data.
+        - On error, returns a JSON response with an error status and code 418.
+    """
     num = request.args.get('itemnum', None)
     a = backend.getitem(num)
     return({"res":a[0],"data":a[1]})
 @app.route('/api/postitems', methods=['POST'])
 def api_postitems():
+    """
+    Handles API requests to post items.
 
+    Returns:
+        - On successful item update, returns a JSON response with a status message.
+        - On error, returns a JSON response with an error status and code 412 or 418.
+    """
     content = request.json
     a = backend.postitems(content,request)
     if a[0] == 0:
@@ -370,12 +478,23 @@ def api_postitems():
 
 @app.route('/logs')
 def logs():
+    """
+    Renders the 'logs.html' template.
 
+    Returns:
+        Flask template render response.
+    """
     return render_template("logs.html")
 
 @app.route('/api/getlog', methods=['POST'])
 def api_getlog():
+    """
+    Handles API requests to retrieve logs.
 
+    Returns:
+        - On successful log retrieval, returns a JSON response with log data.
+        - On error, returns a JSON response with an error status and code 418.
+    """
     a=backend.getlog(request.json["password"])
     if a[0]==1:
         return({"res":a[0],"data":a[1]})
@@ -384,7 +503,12 @@ def api_getlog():
 
 @app.route('/api/db')
 def api_downloadlog():
+    """
+    Handles API requests to download database logs.
 
+    Returns:
+        Renders the 'down.html' template for download.
+    """
     a = backend.getall()
     things = ["user","items","log"]
     count = 0
@@ -404,7 +528,16 @@ def api_downloadlog():
     return render_template("down.html")
 @app.route('/down/<filename>', methods=['GET', 'POST'])
 def download(filename):
+    """
+    Handles file download requests.
 
+    Args:
+        filename (str): Name of the file to be downloaded.
+
+    Returns:
+        - On success, serves the requested file for download.
+        - On error (file not found), returns an error message.
+    """
     if filename not in ["user.csv","items.csv","log.csv"]:
         return "File does not exist"
     try:
@@ -414,12 +547,22 @@ def download(filename):
 
 @app.route("/download/database")
 def download_db():
+    """
+    Handles database download requests.
 
+    Returns:
+        Serves the main database file for download.
+    """
     return send_file("main.db")
 
 @app.route("/admin")
 def admin():
+    """
+    Renders the 'admin.html' template.
 
+    Returns:
+        Flask template render response.
+    """
     return render_template("admin.html")
 
 if __name__ == "__main__":
