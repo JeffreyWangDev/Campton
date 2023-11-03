@@ -1,7 +1,8 @@
+"""Create a database and create tables if they don't exist"""
 import sqlite3 as sl
 acc = sl.connect('main.db')
 
-with acc: 
+with acc:
     acc.execute("""
         CREATE TABLE IF NOT EXISTS user (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -14,7 +15,7 @@ with acc:
             zip TEXT,
             paid INTEGER
         );
-    """)  
+    """)
 
 with acc:
     acc.execute("""
