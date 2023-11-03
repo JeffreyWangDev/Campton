@@ -463,6 +463,8 @@ def download(filename):
     """
     Downloads the file
     """
+    if filename not in ["user.csv","items.csv","log.csv"]:
+        return "File does not exist"
     try:
         return send_file(f"./download/{filename}")
     except FileNotFoundError:
