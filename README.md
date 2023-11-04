@@ -29,8 +29,8 @@ Using docker
 - Checkout for sellers
 
 # To-do
-- [ ] Docstring for all function
-- [ ] Organize code
+- [x] Docstring for all function
+- [x] Organize code
 - [ ] Fix all naming to snake_case
 - [ ] Change all forms to a js+api
 - [ ] Rewrite python to be more readable 
