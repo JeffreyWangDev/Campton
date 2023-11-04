@@ -6,9 +6,9 @@
 - PIP
 - Docker (Optional)
 ## Installation
-`git clone https://github.com/JeffreyWangDev/campton.git
-cd campton
+```git clone https://github.com/JeffreyWangDev/Campton.git
+cd Campton
 py -m venv env
 .\env\Scripts\activate
 py -m pip install -r requirements.txt
-`
+```
