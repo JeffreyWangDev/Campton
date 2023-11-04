@@ -39,7 +39,6 @@ def make():
         A simple confirmation message.
     """
     backend.make_database()
-
     return "Done"
 @app.route('/register', methods=['GET', 'POST'])
 def register():
