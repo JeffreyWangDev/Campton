@@ -28,5 +28,14 @@ Using docker
 -   Receipt printing
 - Checkout for sellers
 
+# To-do
+- [ ] Docstring for all function
+- [ ] Organize code
+- [ ] Fix all naming to snake_case
+- [ ] Change all forms to a js+api
+- [ ] Rewrite python to be more readable 
+- [ ] Add documentation
+- [ ] Add configurations to all features (maybe a generator to make a version for every type of sale)
+
 # License
 MIT License
