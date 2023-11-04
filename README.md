@@ -6,5 +6,9 @@
 - PIP
 - Docker (Optional)
 ## Installation
-`git clone https://github.com/JeffreyWangDev/skiskate.git
+`git clone https://github.com/JeffreyWangDev/campton.git
+cd campton
+py -m venv env
+.\env\Scripts\activate
+py -m pip install -r requirements.txt
 `
