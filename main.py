@@ -1,9 +1,10 @@
 """Main file for all code relating to the server"""
 import werkzeug
-from flask import Flask,redirect,render_template,request,url_for,jsonify, send_file
-#from backend import *
+from flask import Flask, redirect, render_template, request, url_for, jsonify, send_file
+# from backend import *
 import backend
 app = Flask(__name__)
+
 
 @app.route('/goto', methods=['GET', 'POST'])
 def goto():
@@ -20,6 +21,7 @@ def goto():
     except werkzeug.routing.exceptions.BuildError:
         return redirect(url_for("home"))
 
+
 @app.route('/')
 def home():
     """
@@ -29,7 +31,9 @@ def home():
         Flask template render response.
     """
     msg = request.args.get('msg', None)
-    return render_template("home.html",msg=msg)
+    return render_template("home.html", msg=msg)
+
+
 @app.route('/make')
 def make():
     """
@@ -40,6 +44,8 @@ def make():
     """
     backend.make_database()
     return "Done"
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
@@ -54,11 +60,12 @@ def register():
     msg = request.args.get('msg', None)
     if request.method == 'POST':
         cheek_for_error_in_new_seller = backend.newseller(request)
-        if cheek_for_error_in_new_seller !=0:
+        if cheek_for_error_in_new_seller != 0:
             error = cheek_for_error_in_new_seller
         else:
             return redirect(url_for('home', msg="User added"))
-    return render_template('register.html', error=error,msg=msg)
+    return render_template('register.html', error=error, msg=msg)
+
 
 @app.route('/r2', methods=['GET', 'POST'])
 def register2():
@@ -71,11 +78,12 @@ def register2():
     error = None
     if request.method == 'POST':
         cheek_for_error_in_new_seller = backend.newseller(request)
-        if cheek_for_error_in_new_seller !=0:
+        if cheek_for_error_in_new_seller != 0:
             error = cheek_for_error_in_new_seller
         else:
             return redirect(url_for('register', msg="User added"))
     return redirect(url_for('register', error=error))
+
 
 @app.route('/seller', methods=['GET', 'POST'])
 def seller():
@@ -89,12 +97,14 @@ def seller():
     error = None
     if request.method == 'POST':
         seller_data = list(backend.getseller(request.form['phonenn']))
-        if seller_data[0]==0:
+        if seller_data[0] == 0:
             to_format = list(seller_data[1])
-            to_format[2] = backend.phone_format(str(to_format[2])).replace("-"," ")
+            to_format[2] = backend.phone_format(
+                str(to_format[2])).replace("-", " ")
             return render_template('user.html', user=to_format)
         error = seller_data[1]
     return render_template("user.html", error=error)
+
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
@@ -110,7 +120,7 @@ def update():
     user = request.args.get('user', None)
     if request.method == 'POST':
         updated_seller = backend.updateseller(request)
-        if updated_seller !=0:
+        if updated_seller != 0:
             error = updated_seller
             phone = request.form['phonen']
             name = request.form['name']
@@ -118,10 +128,11 @@ def update():
             city = request.form['city']
             state = request.form['state']
             zip_code = request.form['zip']
-            user = (1,1,phone,name,address,city,state,zip_code)
+            user = (1, 1, phone, name, address, city, state, zip_code)
         else:
             return redirect(url_for('home', msg="User updated"))
-    return render_template("user.html", uerror=error , user = user)
+    return render_template("user.html", uerror=error, user=user)
+
 
 @app.route('/u2', methods=['GET', 'POST'])
 def update2():
@@ -132,6 +143,7 @@ def update2():
         Flask redirect response.
     """
     return redirect(url_for('seller'))
+
 
 @app.route('/newitem', methods=['GET', 'POST'])
 def newitem():
@@ -154,14 +166,19 @@ def newitem():
                 print("here")
         else:
             name = request.form['name']
-        new_item = backend.nitem(request,name)
-        if new_item !=0:
+        new_item = backend.nitem(request, name)
+        if new_item != 0:
             error = new_item
         else:
             return redirect(url_for('home', msg="Item added"))
     if phone:
-        return render_template("newitem.html",error = error,phone = phone,msg=msg)
-    return render_template("newitem.html",error = error,msg=msg)
+        return render_template(
+            "newitem.html",
+            error=error,
+            phone=phone,
+            msg=msg)
+    return render_template("newitem.html", error=error, msg=msg)
+
 
 @app.route('/i2', methods=['GET', 'POST'])
 def newitem2():
@@ -179,13 +196,22 @@ def newitem2():
                 name = "Other"
         else:
             name = request.form['name']
-        new_item = backend.nitem(request,name)
-        if new_item !=0:
+        new_item = backend.nitem(request, name)
+        if new_item != 0:
             error = new_item
-            return redirect(url_for('newitem', error=error,phone=request.form['phonen']))
-        return redirect(url_for('newitem', msg="Item added",phone=request.form['phonen']))
-            #return redirect(url_for('newitem', msg="Item added"))
+            return redirect(
+                url_for(
+                    'newitem',
+                    error=error,
+                    phone=request.form['phonen']))
+        return redirect(
+            url_for(
+                'newitem',
+                msg="Item added",
+                phone=request.form['phonen']))
+        # return redirect(url_for('newitem', msg="Item added"))
     return redirect(url_for('newitem', error=error))
+
 
 @app.route('/item', methods=['GET', 'POST'])
 def item():
@@ -207,26 +233,28 @@ def item():
     except (ValueError, IndexError, AttributeError):
         item_data = None
     if item_data:
-        return render_template('item.html',item = item_data,ierror=error)
+        return render_template('item.html', item=item_data, ierror=error)
     if request.method == 'POST':
         raw_item_data = list(backend.getitem(request.form['tid']))
-        if raw_item_data[0]==1:
+        if raw_item_data[0] == 1:
             item_data = list(raw_item_data[1][0])
-            item_data[1] = backend.phone_format(str(item_data[1])).replace("-"," ")
-            if item_data[7] ==0:
-                item_data[7]="Not Sold"
-            elif item_data[7]==1:
+            item_data[1] = backend.phone_format(
+                str(item_data[1])).replace("-", " ")
+            if item_data[7] == 0:
+                item_data[7] = "Not Sold"
+            elif item_data[7] == 1:
                 item_data[7] = "Sold"
             elif item_data[7] == 2:
                 item_data[7] = "Paid"
             elif item_data[7] == 3:
                 item_data[7] = "Returned"
-            return render_template('item.html',item = item)
+            return render_template('item.html', item=item)
 
         error = raw_item_data[1]
     return render_template("item.html", error=error)
 
-@app.route('/itemu', methods=[ 'POST'])
+
+@app.route('/itemu', methods=['POST'])
 def itemu():
     """
     Handles item update form submission. Redirects to the 'item' route with error or success msg.
@@ -241,11 +269,11 @@ def itemu():
                 name = "Other"
         else:
             name = request.form['name']
-        updated_item = backend.updateitem(request,name)
-        if updated_item==0:
-            return redirect(url_for("home",msg = "Item updated"))
+        updated_item = backend.updateitem(request, name)
+        if updated_item == 0:
+            return redirect(url_for("home", msg="Item updated"))
 
-        item_data ="".join(str(e)+"_____" for e in[
+        item_data = "".join(str(e) + "_____" for e in [
             0,
             request.form['phonen'],
             0,
@@ -255,8 +283,10 @@ def itemu():
             request.form['dis'],
             request.form['sold'],
             request.form['cid']])
-        return redirect(url_for("item",error = updated_item,item=item_data))
+        return redirect(url_for("item", error=updated_item, item=item_data))
     return None
+
+
 @app.route('/report', methods=['GET', 'POST'])
 def report():
     """
@@ -274,43 +304,45 @@ def report():
         max_amount = 0
         notsold = 0
         sold = 0
-        if report_data[0] ==0:
+        if report_data[0] == 0:
 
-            current_item =report_data[1]
+            current_item = report_data[1]
             seller_data = list(seller_data[1])
-            formated_item_data=[]
+            formated_item_data = []
             for i in current_item:
                 i = list(i)
-                if i[7] ==0:
-                    i[7]="Not Sold"
-                    notsold=notsold+1
-                elif i[7]==1:
+                if i[7] == 0:
+                    i[7] = "Not Sold"
+                    notsold = notsold + 1
+                elif i[7] == 1:
                     i[7] = "Sold"
-                    max_amount =max_amount+i[4]
-                    sold=sold+1
+                    max_amount = max_amount + i[4]
+                    sold = sold + 1
                 elif i[7] == 2:
                     i[7] = "Paid"
-                    sold=sold+1
+                    sold = sold + 1
                 elif i[7] == 3:
                     i[7] = "Returned"
                 formated_item_data.append(i)
-            seller_data[2] = backend.phone_format(str(seller_data[2])).replace("-"," ")
-            pay = max_amount*7
-            pay=pay/10
-            if "."in str(pay):
+            seller_data[2] = backend.phone_format(
+                str(seller_data[2])).replace("-", " ")
+            pay = max_amount * 7
+            pay = pay / 10
+            if "." in str(pay):
                 paya = str(pay).split(".")
-                pay = paya[0]+"."+paya[1][:2]
+                pay = paya[0] + "." + paya[1][:2]
             return render_template(
-            "reporta.html",
-            item = formated_item_data,
-            user =seller_data,
-            max = max_amount,
-            sold=sold,
-            notsold=notsold,
-            payout = pay)
+                "reporta.html",
+                item=formated_item_data,
+                user=seller_data,
+                max=max_amount,
+                sold=sold,
+                notsold=notsold,
+                payout=pay)
 
         error = report_data
-    return render_template("report.html",error=error)
+    return render_template("report.html", error=error)
+
 
 @app.route('/r', methods=['POST'])
 def reportapi():
@@ -321,15 +353,18 @@ def reportapi():
         - On successful report generation, returns a JSON response with a status message.
         - On error, returns a JSON response with an error status and code 418.
     """
-    pnum =request.json["phone"]
+    pnum = request.json["phone"]
     seller_data = backend.getseller(pnum)
     if seller_data[1][8]:
-        return(jsonify({"status":"Error: Report already generated for this user"}),418)
-    report_data =backend.reporta(request)
-    if report_data ==0:
-        #return redirect(url_for("home",msg = "Changed all items sold to paid"))
-        return(jsonify({"status":"done"}),200)
+        return (
+            jsonify({"status": "Error: Report already generated for this user"}), 418)
+    report_data = backend.reporta(request)
+    if report_data == 0:
+        # return redirect(url_for("home",msg = "Changed all items sold to
+        # paid"))
+        return (jsonify({"status": "done"}), 200)
     return 404
+
 
 @app.route('/print_report')
 def print_report():
@@ -341,47 +376,50 @@ def print_report():
     """
     phone = request.args.get('phone', None)
     if phone:
-        report_data =backend.getreport(phone)
+        report_data = backend.getreport(phone)
         seller_data = backend.getseller(phone)
         max_amount = 0
         notsold = 0
         sold = 0
-        if report_data[0] ==0:
-            current_item =report_data[1]
+        if report_data[0] == 0:
+            current_item = report_data[1]
             seller_data = list(seller_data[1])
-            formated_items=[]
+            formated_items = []
             for i in current_item:
                 i = list(i)
-                if i[7] ==0:
-                    i[7]="Not Sold"
-                    notsold=notsold+1
-                elif i[7]==1:
+                if i[7] == 0:
+                    i[7] = "Not Sold"
+                    notsold = notsold + 1
+                elif i[7] == 1:
                     i[7] = "Sold"
-                    max_amount =max_amount+i[4]
-                    sold=sold+1
+                    max_amount = max_amount + i[4]
+                    sold = sold + 1
                 elif i[7] == 2:
                     i[7] = "Paid"
-                    sold=sold+1
-                    max_amount =max_amount+i[4]
+                    sold = sold + 1
+                    max_amount = max_amount + i[4]
                 elif i[7] == 3:
                     i[7] = "Returned"
                 formated_items.append(i)
-            seller_data[2] = backend.phone_format(str(seller_data[2])).replace("-"," ")
-            pay = max_amount*0.7
-            if "."in str(pay):
+            seller_data[2] = backend.phone_format(
+                str(seller_data[2])).replace("-", " ")
+            pay = max_amount * 0.7
+            if "." in str(pay):
                 paya = str(pay).split(".")
-                pay = paya[0]+"."+paya[1][:2]
+                pay = paya[0] + "." + paya[1][:2]
             return render_template(
-                "rec.html", 
-                item = formated_items,
-                user = seller_data,
-                sold = sold,
-                payout = pay,
-                seller = seller_data[3],
-                phone = seller_data[2],
-                address = seller_data[4])
+                "rec.html",
+                item=formated_items,
+                user=seller_data,
+                sold=sold,
+                payout=pay,
+                seller=seller_data[3],
+                phone=seller_data[2],
+                address=seller_data[4])
 
     return redirect(url_for("report"))
+
+
 @app.route('/print')
 def print_api():
     """
@@ -392,6 +430,7 @@ def print_api():
     """
     return redirect(url_for("report"))
 
+
 @app.route('/checkout')
 def checkout():
     """
@@ -401,6 +440,8 @@ def checkout():
         Flask template render response.
     """
     return render_template("checkout.html")
+
+
 @app.route('/api/getitem')
 def api_getitem():
     """
@@ -412,7 +453,9 @@ def api_getitem():
     """
     num = request.args.get('itemnum', None)
     item_data = backend.getitem(num)
-    return({"res":item_data[0],"data":item_data[1]})
+    return ({"res": item_data[0], "data": item_data[1]})
+
+
 @app.route('/api/postitems', methods=['POST'])
 def api_postitems():
     """
@@ -423,12 +466,13 @@ def api_postitems():
         - On error, returns a JSON response with an error status and code 412 or 418.
     """
     content = request.json
-    item_data = backend.postitems(content,request)
+    item_data = backend.postitems(content, request)
     if item_data[0] == 0:
-        return jsonify({"status":"updated"})
-    if item_data[0] ==1:
-        return jsonify({"status":item_data[1]}),412
-    return jsonify({"status":item_data[1]}),418
+        return jsonify({"status": "updated"})
+    if item_data[0] == 1:
+        return jsonify({"status": item_data[1]}), 412
+    return jsonify({"status": item_data[1]}), 418
+
 
 @app.route('/logs')
 def logs():
@@ -440,6 +484,7 @@ def logs():
     """
     return render_template("logs.html")
 
+
 @app.route('/api/getlog', methods=['POST'])
 def api_getlog():
     """
@@ -449,10 +494,10 @@ def api_getlog():
         - On successful log retrieval, returns a JSON response with log data.
         - On error, returns a JSON response with an error status and code 418.
     """
-    log_data=backend.getlog(request.json["password"])
-    if log_data[0]==1:
-        return({"res":log_data[0],"data":log_data[1]})
-    return(jsonify({"res":log_data[0],"data":log_data[1]}),418)
+    log_data = backend.getlog(request.json["password"])
+    if log_data[0] == 1:
+        return ({"res": log_data[0], "data": log_data[1]})
+    return (jsonify({"res": log_data[0], "data": log_data[1]}), 418)
 
 
 @app.route('/api/db')
@@ -464,7 +509,7 @@ def api_downloadlog():
         Renders the 'down.html' template for download.
     """
     all_data = backend.getall()
-    things = ["user","items","log"]
+    things = ["user", "items", "log"]
     count = 0
     for i in all_data:
         with open(f"./download/{things[count]}.csv", 'w', encoding="utf-8") as f:
@@ -472,14 +517,16 @@ def api_downloadlog():
                 add = "0"
                 for j in k:
                     if j:
-                        add=add+","+str(j)
+                        add = add + "," + str(j)
                     else:
-                        add=add+","+"NONE"
+                        add = add + "," + "NONE"
                 f.write(add)
                 f.write("\n")
-        count = count+1
-    #return send_from_directory(directory='logs')
+        count = count + 1
+    # return send_from_directory(directory='logs')
     return render_template("down.html")
+
+
 @app.route('/down/<filename>', methods=['GET', 'POST'])
 def download(filename):
     """
@@ -492,12 +539,13 @@ def download(filename):
         - On success, serves the requested file for download.
         - On error (file not found), returns an error message.
     """
-    if filename not in ["user.csv","items.csv","log.csv"]:
+    if filename not in ["user.csv", "items.csv", "log.csv"]:
         return "File does not exist"
     try:
         return send_file(f"./download/{filename}")
     except FileNotFoundError:
         return "File does not exist"
+
 
 @app.route("/download/database")
 def download_db():
@@ -509,6 +557,7 @@ def download_db():
     """
     return send_file("main.db")
 
+
 @app.route("/admin")
 def admin():
     """
@@ -518,6 +567,7 @@ def admin():
         Flask template render response.
     """
     return render_template("admin.html")
+
 
 if __name__ == "__main__":
     app.run()
