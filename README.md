@@ -15,7 +15,7 @@ py -m pip install -r requirements.txt
 ## Running
 1. Start venv with `.\env\Scripts\activate`
 2. Run `py main.py`
-Using docker
+### Using docker
 1. Build the file with `docker build . -t campton`
 2. Run the file with `docker run campton`
 
