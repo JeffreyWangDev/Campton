@@ -273,10 +273,10 @@ def nitem(request, itemname: str):
     sqlite.close()
     if item:
         return "Error: Item number already in use"
-    a = getseller(sellerphone.replace(" ", ""))
-    if a[0] == 1:
-        return a[1]
-    a = a[1]
+    seller_data = getseller(sellerphone.replace(" ", ""))
+    if seller_data[0] == 1:
+        return seller_data[1]
+    seller_data = seller_data[1]
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     newid = getnewiid()
@@ -290,8 +290,8 @@ def nitem(request, itemname: str):
                    itemstatus,
                    itemcid)
                    VALUES (?, ?, ?,?,?,?,?,?)""",
-                   (int(a[2]),
-                    str(a[1]),
+                   (int(seller_data[2]),
+                    str(seller_data[1]),
                     str(itemid),
                     int(itemprice),
                     str(itemname),
@@ -304,7 +304,8 @@ def nitem(request, itemname: str):
     ip = itemprice
     iname = itemname
     addlog(
-        f"NEWITEM: {str(a[2])} {str(a[1])} {itemid} {ip} {iname} {itemdisc} {0} {newid}",
+        f"NEWITEM: {str(seller_data[2])} {str(seller_data[1])} "
+        +f"{itemid} {ip} {iname} {itemdisc} {0} {newid}",
         request)
     return 0
 
@@ -350,12 +351,12 @@ def updateitem(request, itemname: str):
     itemdisc = request.form['dis']
     sold = request.form['sold']
     item_id = request.form['cid']
-    a = getseller(sellerphone.replace(" ", ""))
-    if a[0] == 1:
-        return a[1]
-    a = a[1]
-    b = getitem(item_id)
-    if b[0] == 1 and b[1][0][8] != item_id:
+    seller_data = getseller(sellerphone.replace(" ", ""))
+    if seller_data[0] == 1:
+        return seller_data[1]
+    seller_data = seller_data[1]
+    item_data = getitem(item_id)
+    if item_data[0] == 1 and item_data[1][0][8] != item_id:
         return "Error: Item id is already in use"
     phone = str(sellerphone.replace(" ", ""))
     sqlite = sl.connect('main.db')
@@ -388,7 +389,7 @@ def updateitem(request, itemname: str):
                    itemstatus=?
                    WHERE itemcid=?""", (
         int(phone),
-        str(a[1]),
+        str(seller_data[1]),
         str(itemid),
         int(ip),
         str(itemname),
@@ -399,7 +400,7 @@ def updateitem(request, itemname: str):
     sqlite.close()
     iname = itemname
     addlog(
-        f"UPDATEITEM: {phone} {str(a[1])} {itemid} {ip} {iname} {itemdisc} {sold} {id}",
+        f"UPDATEITEM: {phone} {str(seller_data[1])} {itemid} {ip} {iname} {itemdisc} {sold} {id}",
         request)
     return 0
 
@@ -415,16 +416,16 @@ def getreport(phone):
         list: A list containing either seller information or a list of item information.
     """
     phone = phone.replace(" ", "")
-    a = getseller(phone.replace(" ", ""))
+    seller_data = getseller(phone.replace(" ", ""))
     # print(a)
-    if a[0] == 1:
-        return a[1]
+    if seller_data[0] == 1:
+        return seller_data[1]
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     item = cursor.execute(
         "SELECT * FROM items WHERE sellerid = ?",
         (str(
-            a[1][1]),
+            seller_data[1][1]),
          )).fetchall()
     cursor.close()
     sqlite.close()
@@ -457,9 +458,9 @@ def reporta(request):
     """
     phone = request.json["phone"]
     phone = phone.replace(" ", "")
-    a = getseller(phone.replace(" ", ""))
-    if a[0] == 1:
-        return a[1]
+    seller_data = getseller(phone.replace(" ", ""))
+    if seller_data[0] == 1:
+        return seller_data[1]
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     cursor.execute(
@@ -488,9 +489,9 @@ def postitems(items, request):
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
     for i in items:
-        a = getitem(str(items[i]))
-        if a[0] == 1:
-            if a[1][0][7] == 0:
+        item_data = getitem(str(items[i]))
+        if item_data[0] == 1:
+            if item_data[1][0][7] == 0:
                 # print("added")
                 cursor.execute(
                     "UPDATE items SET itemstatus=1 WHERE itemid=?", (str(
@@ -565,32 +566,32 @@ def getall():
     """
     sqlite = sl.connect('main.db')
     cursor = sqlite.cursor()
-    item1 = cursor.execute("SELECT * FROM user").fetchall()
-    item2 = cursor.execute("SELECT * FROM items").fetchall()
-    item3 = cursor.execute("SELECT * FROM log").fetchall()
+    user_data = cursor.execute("SELECT * FROM user").fetchall()
+    item_data = cursor.execute("SELECT * FROM items").fetchall()
+    log_data = cursor.execute("SELECT * FROM log").fetchall()
     user = []
     items = []
     log = []
 
-    item11 = cursor.execute("SELECT * FROM user")
-    a = []
-    for i in item11.description:
-        a.append(i[0])
-    user.append(a)
-    item22 = cursor.execute("SELECT * FROM items")
-    b = []
-    for i in item22.description:
-        b.append(i[0])
-    items.append(b)
-    item33 = cursor.execute("SELECT * FROM log")
-    c = []
-    for i in item33.description:
-        c.append(i[0])
-    log.append(c)
+    user_header_data = cursor.execute("SELECT * FROM user")
+    user_headers = []
+    for i in user_header_data.description:
+        user_headers.append(i[0])
+    user.append(user_headers)
+    item_header_data = cursor.execute("SELECT * FROM items")
+    item_headers = []
+    for i in item_header_data.description:
+        item_headers.append(i[0])
+    items.append(item_headers)
+    log_header_data = cursor.execute("SELECT * FROM log")
+    log_headers = []
+    for i in log_header_data.description:
+        log_headers.append(i[0])
+    log.append(log_headers)
 
     cursor.close()
     sqlite.close()
-    user.extend(item1)
-    items.extend(item2)
-    log.extend(item3)
+    user.extend(user_data)
+    items.extend(item_data)
+    log.extend(log_data)
     return [user, items, log]
