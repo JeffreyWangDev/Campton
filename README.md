@@ -13,11 +13,15 @@ py -m venv env
 py -m pip install -r requirements.txt
 ```
 ## Running
-1. Start venv with `.\env\Scripts\activate`
-2. Run `py main.py`
-### Using docker
-1. Build the file with `docker build . -t campton`
-2. Run the file with `docker run campton`
+### Build it yourself
+> 1. Start venv with `.\env\Scripts\activate`
+> 2. Run `py main.py`
+> #### Using docker
+> > 1. Build the file with `docker build . -t campton`
+> > 2. Run the file with `docker run campton`
+### Prebuild version 
+> 1. Run `docker pull ghcr.io/jeffreywangdev/campton:main` (replace main with the tag, all tags can be found [here](https://github.com/JeffreyWangDev/Campton/pkgs/container/campton))
+> 2. Run `docker run -p80:80  ghcr.io/jeffreywangdev/campton:main` (replace the first number in -p with what port is needed)
 
 # Features
 - User Registration
