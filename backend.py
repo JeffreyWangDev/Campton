@@ -55,8 +55,6 @@ def make_database():
                 time INTGER
             );
         """)
-
-
 make_database()
 
 
