@@ -151,7 +151,6 @@ def newitem():
             name = request.form['tname']
             if not name:
                 name = "Other"
-                print("here")
         else:
             name = request.form['name']
         a = backend.nitem(request,name)
@@ -221,7 +220,7 @@ def item():
                 item_data[7] = "Paid"
             elif item_data[7] == 3:
                 item_data[7] = "Returned"
-            return render_template('item.html',item = item)
+            return render_template('item.html',item = item_data)
 
         error = a[1]
     return render_template("item.html", error=error)

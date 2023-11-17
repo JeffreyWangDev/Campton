@@ -315,13 +315,14 @@ def updateitem(request, itemname:str):
     if a[0]==1:
         return a[1]
     a=a[1]
-    b = getitem(item_id)
+    b = getitem(itemid)
+    print(b)
     if b[0] == 1 and b[1][0][8] != item_id:
-        return "Error: Item id is already in use"
+        return "Error: Item id is not found"
     phone = str(sellerphone.replace(" ",""))
     sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
-    item = cursor.execute("SELECT * FROM items WHERE itemcid = ?", (str(id),)).fetchone()
+    item = cursor.execute("SELECT * FROM items WHERE itemcid = ?", (str(item_id),)).fetchone()
     cursor.close()
     sqlite.close()
     if str(sold).lower() == "not sold":
@@ -353,7 +354,7 @@ def updateitem(request, itemname:str):
                        int(ip),
                        str(itemname),
                        str(itemdisc),
-                       sold,str(id)))
+                       sold,str(item_id)))
     sqlite.commit()
     cursor.close()
     sqlite.close()

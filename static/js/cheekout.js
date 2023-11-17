@@ -6,7 +6,7 @@ async function additem(){
     console.log(res)
     if(res["res"]==1){
         var tf = true;
-        if(res["data"][0][7].toString()==0){ 
+        if(res["data"][0][7].toString()==0){
             
         
         var rowl = document.getElementById("all").rows.length;
@@ -86,9 +86,6 @@ async function submit(){
                     console.log(resp)
                     alert(resp["status"])
                 }
-   
         }
     }
-
-    
 }
