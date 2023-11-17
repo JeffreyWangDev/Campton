@@ -6,7 +6,7 @@ import time
 import phonenumbers
 
 
-def make_database():
+def make_database(): # DONE database.py
     """
     Makes a database and creates tables if they don't exist
 
@@ -20,13 +20,13 @@ def make_database():
             CREATE TABLE IF NOT EXISTS user (
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 sellerid TEXT NOT NULL,
-                phone INTEGER NOT NULL,
+                phone TEXT NOT NULL,
                 name TEXT,
                 address TEXT,
                 city TEXT,
                 state TEXT,
                 zip TEXT,
-                paid INTEGER
+                paid BOOLEAN
             );
         """)
 
@@ -52,13 +52,13 @@ def make_database():
                 event STRING,
                 ip STRING,
                 useragent STRING,
-                time INTGER
+                time INTEGER
             );
         """)
 make_database()
 
 
-def cheekphone(phone):
+def cheekphone(phone): # DONE general.py
     """
     Checks the validity of a phone number.
 
@@ -75,7 +75,7 @@ def cheekphone(phone):
         return False
 
 
-def getnewid():
+def getnewid(): # DONE general.py
     """
     Generates a new unique seller ID.
 
@@ -98,7 +98,7 @@ def getnewid():
     return getnewid()
 
 
-def getnewiid():
+def getnewiid(): # DONE general.py
     """
     Generates a new unique item ID.
 
@@ -121,7 +121,7 @@ def getnewiid():
     return getnewiid()
 
 
-def newseller(request):
+def newseller(request): # DONE user.py
     """
     Creates a new seller in the database.
 
@@ -170,7 +170,7 @@ def newseller(request):
     return 0
 
 
-def getseller(pnum):
+def getseller(pnum): # DONE user.py
     """
     Retrieves seller information by phone number.
 
@@ -197,7 +197,7 @@ def getseller(pnum):
     return (1, "Error: Phone number not found")
 
 
-def updateseller(request):
+def updateseller(request): # DONE user.py
     """
     Updates seller information in the database.
 
@@ -246,7 +246,7 @@ def updateseller(request):
     return 0
 
 
-def nitem(request, itemname: str):
+def nitem(request, itemname: str): # TODO
     """
     Adds a new item to the database.
 
@@ -308,7 +308,7 @@ def nitem(request, itemname: str):
     return 0
 
 
-def getitem(itemid=None):
+def getitem(itemid=None): # TODO
     """
     Retrieves item information by item ID.
 
@@ -331,7 +331,7 @@ def getitem(itemid=None):
     return (2, "Error: Item not found")
 
 
-def updateitem(request, itemname: str):
+def updateitem(request, itemname: str): # TODO
     """
     Updates item information in the database.
 
@@ -403,7 +403,7 @@ def updateitem(request, itemname: str):
     return 0
 
 
-def getreport(phone):
+def getreport(phone): # TODO
     """
     Retrieves a report of items associated with a seller's phone number.
 
@@ -430,8 +430,7 @@ def getreport(phone):
     # print(item)
     return [0, item]
 
-
-def phone_format(n):
+def phone_format(n): # Done general.py
     """
     Formats a phone number with dashes.
 
@@ -444,7 +443,7 @@ def phone_format(n):
     return format(int(n[:-1]), ",").replace(",", "-") + n[-1]
 
 
-def reporta(request):
+def reporta(request): # TODO
     """
     Marks items as paid in the database and updates their status.
 
@@ -472,7 +471,7 @@ def reporta(request):
     return 0
 
 
-def postitems(items, request):
+def postitems(items, request): # TODO
     """
     Marks items as sold in the database and updates their status.
 
@@ -509,7 +508,7 @@ def postitems(items, request):
     return [0]
 
 
-def addlog(event, request):
+def addlog(event, request): # TODO
     """
     Adds a log entry to the database.
 
@@ -534,7 +533,7 @@ def addlog(event, request):
     return 0
 
 
-def getlog(password):
+def getlog(password): # TODO
     """
     Retrieves the log entries from the database.
 
@@ -555,7 +554,7 @@ def getlog(password):
     return [0, "Wrong Password!"]
 
 
-def getall():
+def getall(): # TODO
     """
     Retrieves all data from the database: user information, item information, and log entries.
 

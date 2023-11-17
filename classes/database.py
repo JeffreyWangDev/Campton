@@ -32,20 +32,27 @@ class DB:
             conn.execute("""
                     CREATE TABLE IF NOT EXISTS user (
                         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                        sellerid TEXT NOT NULL
+                        sellerid TEXT NOT NULL,
+                        phone TEXT NOT NULL,
+                        name TEXT,
+                        address TEXT,
+                        city TEXT,
+                        state TEXT,
+                        zip TEXT,
+                        paid BOOLEAN
                     );
                 """)
             conn.execute("""
                     CREATE TABLE IF NOT EXISTS items (
                         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        itemcustomid TEXT NOT NULL,
                         sellerphone INTEGER NOT NULL,
                         sellerid TEXT NOT NULL,
                         itemid TEXT NOT NULL,
                         itemprice INTEGER NOT NULL,
                         itemname TEXT NOT NULL,
                         itemdisc TEXT,
-                        itemstatus INTEGER NOT NULL,
-                        itemcid TEXT NOT NULL
+                        itemstatus INTEGER NOT NULL
                     );
                 """)
             conn.execute("""
@@ -57,7 +64,6 @@ class DB:
                         time INTGER
                     );
                 """)
-
     def insert(self, table, data):
         """
         Inserts data into a table
@@ -133,12 +139,8 @@ class DB:
             result = cursor.fetchall()
             cursor.close()
             return result
+    
+ 
 
 db = DB()
 db.create_db()
-
-print(db.select('user'))
-db.insert('user', {'sellerid': '1234567890aa'})
-print(db.select('user'))
-db.update('user', {'sellerid': '0987654321ab'}, {'id': 1})
-print(db.select('user'))
