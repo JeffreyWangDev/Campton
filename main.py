@@ -467,7 +467,7 @@ def api_downloadlog():
     things = ["user","items","log"]
     count = 0
     for i in a:
-        with open(f"./download/{things[count]}.csv", 'w', encoding="utf-8") as f:
+        with open(f"./data/{things[count]}.csv", 'w', encoding="utf-8") as f:
             for k in i:
                 add = "0"
                 for j in k:
@@ -495,7 +495,7 @@ def download(filename):
     if filename not in ["user.csv","items.csv","log.csv"]:
         return "File does not exist"
     try:
-        return send_file(f"./download/{filename}")
+        return send_file(f"./data/{filename}")
     except FileNotFoundError:
         return "File does not exist"
 
