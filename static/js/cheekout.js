@@ -73,7 +73,7 @@ async function submit(){
         
         alert("Please add items before submiting")
     }else{
-        if (confirm("Please confirm the cheekout is with the correct item id's and that the user has paid: ") == true) {
+        if (confirm("Please confirm the checkout is with the correct item id's and that the user has paid: ") == true) {
             var res = await fetch("/api/postitems", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'}, 
@@ -81,7 +81,7 @@ async function submit(){
               })
                 var resp = await res.json()
                 if(res.status == 200){
-                    window.location.href = "/?msg=Cheekout+complete";
+                    window.location.href = "/?msg=Checkout+complete";
                 }else{
                     console.log(resp)
                     alert(resp["status"])
