@@ -1,9 +1,9 @@
 .vercel
 d.py
-main.db
-skiskatewebsite.zip
+*.zip
 dockerfile
 env
 .dockerignore
-.csv
+*.csv
 __pycache__
+*.db
