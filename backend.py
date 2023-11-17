@@ -12,7 +12,7 @@ def make_database():
     Returns:
         Nonea
     """
-    acc = sl.connect('main.db')
+    acc = sl.connect('./data/main.db')
 
     with acc:
         acc.execute("""
@@ -83,7 +83,7 @@ def getnewid():
     """
     link = ''.join(random.choice(string.ascii_letters+str(1234567890)) for x in range(5))
     link = link +random.choice("ABCDEFGHIJKMNORSUVWXYZ1234567890")
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM user WHERE sellerid = ?", (str(link),)).fetchone()
     cursor.close()
@@ -100,7 +100,7 @@ def getnewiid():
     """
     link = ''.join(random.choice(string.ascii_letters+str(1234567890)) for x in range(5))
     link = link +random.choice("ABCDEFGHIJKMNORSUVWXYZ1234567890")
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM items WHERE itemcid = ?", (str(link),)).fetchone()
     cursor.close()
@@ -128,14 +128,14 @@ def newseller(request):
         return "Error: Phone number invalid"
 
     phone = int(phonen.replace(" ",""))
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM user WHERE phone = ?", (phone,)).fetchone()
     cursor.close()
     sqlite.close()
     if item:
         return "Error: Phone number already in use"
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     newid = getnewid()
     cursor.execute(
@@ -166,7 +166,7 @@ def getseller(pnum):
     if not cheekphone(pnum):
         return (1,"Error: Phone number invalid")
     phone = str(pnum.replace(" ",""))
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     try:
         item = cursor.execute("SELECT * FROM user WHERE phone = ?", (int(phone),)).fetchone()
@@ -199,14 +199,14 @@ def updateseller(request):
     if not cheekphone(phonen):
         return "Error: Phone number invalid"
     phone = str(phonen.replace(" ",""))
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM user WHERE sellerid = ?", (str(user_id),)).fetchone()
     cursor.close()
     sqlite.close()
     if not item:
         return "Error: User not found"
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     cursor.execute("UPDATE user SET name=?,address=?,city=?,state=?,zip=? WHERE sellerid=?",
                    (name,
@@ -235,7 +235,7 @@ def nitem(request,itemname:str):
     itemid = str(request.form['id'])
     itemprice = str(request.form['price'])
     itemdisc = str(request.form['dis'])
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM items WHERE itemid = ?", (str(itemid),)).fetchone()
     cursor.close()
@@ -246,7 +246,7 @@ def nitem(request,itemname:str):
     if a[0]==1:
         return a[1]
     a=a[1]
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     newid=getnewiid()
     cursor.execute("""INSERT INTO items(
@@ -285,7 +285,7 @@ def getitem(itemid=None):
     Returns:
         tuple: A tuple with error code (1 for success, 2 for error) and item info or an error msg.
     """
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM items WHERE itemid = ?", (int(itemid),)).fetchall()
     cursor.close()
@@ -319,7 +319,7 @@ def updateitem(request, itemname:str):
     if b[0] == 1 and b[1][0][8] != item_id:
         return "Error: Item id is already in use"
     phone = str(sellerphone.replace(" ",""))
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM items WHERE itemcid = ?", (str(id),)).fetchone()
     cursor.close()
@@ -336,7 +336,7 @@ def updateitem(request, itemname:str):
         return 'Error: Item status can only be Not sold, Sold, or Paid'
     if not item:
         return "Error: Item not found"
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     cursor.execute("""UPDATE items SET
                    sellerphone=?,
@@ -375,7 +375,7 @@ def getreport(phone):
     #print(a)
     if a[0] == 1:
         return a[1]
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item = cursor.execute("SELECT * FROM items WHERE sellerid = ?", (str(a[1][1]),)).fetchall()
     cursor.close()
@@ -409,7 +409,7 @@ def reporta(request):
     a = getseller(phone.replace(" ",""))
     if a[0] == 1:
         return a[1]
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     cursor.execute("UPDATE items SET itemstatus=2 WHERE sellerphone=? AND itemstatus = 1", (phone,))
     sqlite.commit()
@@ -432,7 +432,7 @@ def postitems(items,request):
         list: A list with error code (0 for success, 1 for item not found, 2 for item already sold) 
         and an error message if applicable.
     """
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     for i in items:
         a = getitem(str(items[i]))
@@ -466,7 +466,7 @@ def addlog(event,request):
     Returns:
         int: Always returns 0.
     """
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     cursor.execute("INSERT INTO log(event,ip,useragent,time) VALUES (?, ?, ?, ?)",
                    (str(event),
@@ -489,7 +489,7 @@ def getlog(password):
         and the log entries if the password is correct.
     """
     if password == "Password12":
-        sqlite = sl.connect('main.db')
+        sqlite = sl.connect('./data/main.db')
         cursor = sqlite.cursor()
         item = cursor.execute("SELECT * FROM log").fetchall()
         cursor.close()
@@ -503,7 +503,7 @@ def getall():
     Returns:
         list: A list containing user information, item information, and log entries.
     """
-    sqlite = sl.connect('main.db')
+    sqlite = sl.connect('./data/main.db')
     cursor = sqlite.cursor()
     item1 = cursor.execute("SELECT * FROM user").fetchall()
     item2 = cursor.execute("SELECT * FROM items").fetchall()

@@ -507,7 +507,7 @@ def download_db():
     Returns:
         Serves the main database file for download.
     """
-    return send_file("main.db")
+    return send_file("./data/main.db")
 
 @app.route("/admin")
 def admin():
