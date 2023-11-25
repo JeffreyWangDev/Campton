@@ -478,6 +478,7 @@ def addlog(event,request):
     cursor.close()
     sqlite.close()
     return 0
+
 def getlog(password):
     """
     Retrieves the log entries from the database.

@@ -1,0 +1,21 @@
+Item price can only be full prices
+Add get all items for a seller
+
+Add a confermation page on add item asking if a new phone number needs to added as a seller or is that was a mistype
+
+Maybe add a barcode scanner to auto scan item ids
+
+Replace dashs like spaces in newseller
+
+On register new user, add button to register item
+
+Allow users to self register and add items
+
+/report has spelling error with cloths "lothes/Gloves"
+
+Bulk add items 
+
+Add option to self register
+
+Item status is called item name, fix spelling on /item
+Cap Description on /item
