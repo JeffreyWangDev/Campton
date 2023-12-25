@@ -4,5 +4,5 @@ idna==3.4
 requests==2.31.0
 urllib3==2.1.0
 Flask==3.0.0
-phonenumbers==8.13.24 
+phonenumbers==8.13.27 
 Werkzeug==3.0.1
