@@ -21,7 +21,7 @@ py -m pip install -r requirements.txt
 > > 2. Run the file with `docker run campton`
 ### Prebuild version 
 > 1. Run `docker pull ghcr.io/jeffreywangdev/campton:main` (replace main with the tag, all tags can be found [here](https://github.com/JeffreyWangDev/Campton/pkgs/container/campton))
-> 2. Run `docker run -p80:80  ghcr.io/jeffreywangdev/campton:main` (replace the first number in -p with what port is needed)
+> 2. Run `docker run -p 80:80 -v campton-data:/app/data ghcr.io/jeffreywangdev/campton:main` (replace the first number in -p with what port is needed)
 
 # Features
 - User Registration
